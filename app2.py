@@ -327,50 +327,51 @@ st.set_page_config(
 # 2. CUSTOM STYLE INJECTION (The "Fancy" Part)
 
 
-
-import streamlit as st
-
-# 1. Setup
-st.set_page_config(layout="wide", page_title="GreenFlow | Premium Hydroponics")
-
-# 2. Scenic Professional Styling
+# 2. Professional White Styling
 st.markdown("""
     <style>
-    /* Import High-End Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
 
-    /* 1. Full-Screen Scenic Background with Dark Overlay */
+    /* 1. Pure White Background */
     .stApp {
-        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
-                    url('https://images.unsplash.com/photo-1558444479-c848259641f2?q=80&w=2070&auto=format&fit=crop');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+        background: #FFFFFF !important;
     }
 
-    /* 2. Remove Streamlit default whitespace */
-    [data-testid="stHeader"] { background: transparent; }
-    .block-container { padding-top: 2rem !important; }
-
-    /* 3. Global Typography */
+    /* 2. Adjust Text for High Contrast on White */
     html, body, [data-testid="stMarkdownContainer"] p {
         font-family: 'Outfit', sans-serif !important;
-        color: #f0f0f0 !important;
+        color: #2D3436 !important; /* Professional Dark Grey */
     }
 
-    /* 4. Glassmorphism Panels (Professional Containers) */
+    /* 3. Clean Card UI (Replaces Glassmorphism) */
     .glass-card {
-        background: rgba(255, 255, 255, 0.07);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
+        background: #FFFFFF;
+        border: 1px solid #E0E0E0; /* Subtle border */
+        border-radius: 16px;
         padding: 30px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft professional shadow */
         margin-bottom: 25px;
     }
 
-    /* 5. Glowing Accents */
+    /* 4. Headings - Deep Green for Branding */
+    h1, h2, h3 {
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 700 !important;
+        color: #1B5E20 !important;
+    }
+
+    /* 5. Metrics styling for white background */
+    [data-testid="stMetric"] {
+        background: #F8F9FA !important;
+        padding: 15px;
+        border-radius: 12px;
+        border-left: 4px solid #4CAF50;
+        border-top: 1px solid #E0E0E0;
+        border-right: 1px solid #E0E0E0;
+        border-bottom: 1px solid #E0E0E0;
+    }
+
+    /* 6. Glowing Accents */
     .green-accent {
         color: #4CAF50;
         font-weight: 700;
@@ -378,51 +379,7 @@ st.markdown("""
         letter-spacing: 2px;
     }
 
-    h1, h2, h3 {
-        font-family: 'Outfit', sans-serif !important;
-        font-weight: 700 !important;
-        color: white !important;
-    }
-
-    /* 6. Custom Metric Styling */
-    [data-testid="stMetric"] {
-        background: rgba(0, 0, 0, 0.3);
-        padding: 15px;
-        border-radius: 12px;
-        border-left: 4px solid #4CAF50;
-    }
+    [data-testid="stHeader"] { background: transparent; }
+    .block-container { padding-top: 2rem !important; }
     </style>
-    """, unsafe_allow_html=True)
-
-# 3. Application Layout
-st.markdown('<p class="green-accent">System Online</p>', unsafe_allow_html=True)
-st.markdown('# 🌿 GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
-
-# Layout Grid
-col1, col2, col3 = st.columns([1, 1, 1])
-
-with col1:
-    st.markdown("""
-    <div class="glass-card">
-        <h3>🌱 Crop Health</h3>
-        <p style="font-weight:600;">Your cherry tomatoes are in the <b>flowering stage</b>. Nutrient uptake is optimal.</p>
-        <hr style="opacity:0.2">
-        <small>Next Harvest: 12 Days</small>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown('<div class="glass-card"><h3>📊 Environment</h3>', unsafe_allow_html=True)
-    st.metric("Room Temperature", "24°C", "1.2°C")
-    st.metric("Humidity", "65%", "-2%")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-with col3:
-    st.markdown("""
-    <div class="glass-card">
-        <h3>🛡️ Smart Alerts</h3>
-        <p>✅ All sensors calibrated</p>
-        <p>✅ pH stable at 6.2</p>
-        <p style="color:#FFC107;">⚠️ Water reservoir at 40%</p>
-    </div>
     """, unsafe_allow_html=True)
