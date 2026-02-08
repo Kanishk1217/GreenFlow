@@ -326,89 +326,85 @@ st.set_page_config(
 
 # 2. CUSTOM STYLE INJECTION (The "Fancy" Part)
 
-# 1. Page Config
-st.set_page_config(layout="wide", page_title="GreenFlow Premium")
+import streamlit as st
 
-# 2. Advanced CSS for Layout & Glassmorphism
+# 1. Setup
+st.set_page_config(layout="wide", page_title="GreenFlow Pro")
+
+# 2. The "No-Gap" CSS
 st.markdown("""
     <style>
-    /* Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
-
-    html, body, [data-testid="stAppViewContainer"] {
-        font-family: 'Outfit', sans-serif;
-        background: radial-gradient(circle at top left, #1e3a1e, #0a0a0a); /* Deep Green to Black */
-        color: white;
-    }
-
-    /* Glass Container */
-    .bento-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        padding: 25px;
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
+    /* 1. Eliminate the top white bar and padding */
+    [data-testid="stHeader"] {
+        background: rgba(0,0,0,0);
     }
     
-    .bento-card:hover {
-        border: 1px solid rgba(76, 175, 80, 0.5);
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    /* Custom Header */
-    .main-header {
-        font-size: 3rem;
-        font-weight: 700;
-        background: linear-gradient(to right, #4cf550, #ffffff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 30px;
-    }
-
-    /* Remove Streamlit default padding */
     .block-container {
-        padding-top: 2rem !important;
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
+        max-width: 95%; /* Gives a slight professional margin on sides */
+    }
+
+    /* 2. Edge-to-Edge Background Gradient */
+    .stApp {
+        background: linear-gradient(135deg, 
+            #1b5e20 0%,   /* Deep Forest Green */
+            #ffffff 50%,  /* Clean White */
+            #000000 100%  /* Sleek Black */
+        ) !important;
+        background-attachment: fixed;
+    }
+
+    /* 3. Typography & Professional Polish */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    
+    html, body, [class*="st-"] {
+        font-family: 'Inter', sans-serif;
+    }
+
+    h1 {
+        color: white !important;
+        font-weight: 700;
+        padding-top: 2rem; /* Adds space inside the colored area */
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* 4. Glassmorphism Cards for Content */
+    .stCard {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.3);
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);
+        margin-bottom: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. The New Layout Structure
-st.markdown('<h1 class="main-header">GreenFlow OS 2.0</h1>', unsafe_allow_html=True)
+# 3. Implementing the Layout
+st.markdown("<h1>GreenFlow Executive Dashboard</h1>", unsafe_allow_html=True)
 
-# Top Row: Bento Grid (3 Columns)
-col_left, col_mid, col_right = st.columns([1, 2, 1])
+# Use columns to create a clean "Grid"
+col1, col2 = st.columns([2, 1])
 
-with col_left:
-    st.markdown("""<div class="bento-card">
-        <h3>🌱 Live Status</h3>
-        <p style="color: #4cf550; font-weight: bold;">SYSTEM ACTIVE</p>
-        <small>Next nutrient cycle: 14m</small>
-    </div>""", unsafe_allow_html=True)
-    
-    st.markdown("""<div class="bento-card">
-        <h3>🔋 Power</h3>
-        <p>98% Efficiency</p>
-    </div>""", unsafe_allow_html=True)
+with col1:
+    st.markdown("""
+    <div class="stCard">
+        <h3 style="color:#1b5e20;">System Growth Analysis</h3>
+        <p><b>Status:</b> Optimal. Your hydroponic system is performing 12% above average.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    # Put your charts/data here
+    st.line_chart([10, 15, 13, 17, 22])
 
-with col_mid:
-    # Main visual or chart area
-    st.markdown('<div class="bento-card">', unsafe_allow_html=True)
-    st.subheader("Growth Velocity")
-    # Placeholder for a chart
-    st.line_chart([1, 3, 5, 4, 6, 8, 7, 10])
-    st.markdown('</div>', unsafe_allow_html=True)
-
-with col_right:
-    st.markdown("""<div class="bento-card" style="height: 100%;">
-        <h3>📋 Alerts</h3>
-        <ul style="font-size: 0.8rem; list-style: none; padding: 0;">
-            <li style="margin-bottom: 10px;">🟢 pH Stabilized</li>
-            <li style="margin-bottom: 10px;">🟡 Water Level Low</li>
-            <li>🔴 Sensor 4 Offline</li>
+with col2:
+    st.markdown("""
+    <div class="stCard">
+        <h3 style="color:#1b5e20;">Active Notifications</h3>
+        <ul>
+            <li><b>pH Level:</b> 6.2 (Stable)</li>
+            <li><b>Water:</b> 85% (Optimal)</li>
         </ul>
-    </div>""", unsafe_allow_html=True)
-
-# Bottom Row
-st.markdown('<div class="bento-card"><h3>🌿 Crop Distribution</h3></div>', unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
