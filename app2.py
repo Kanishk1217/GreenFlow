@@ -326,85 +326,103 @@ st.set_page_config(
 
 # 2. CUSTOM STYLE INJECTION (The "Fancy" Part)
 
+
+
 import streamlit as st
 
 # 1. Setup
-st.set_page_config(layout="wide", page_title="GreenFlow Pro")
+st.set_page_config(layout="wide", page_title="GreenFlow | Premium Hydroponics")
 
-# 2. The "No-Gap" CSS
+# 2. Scenic Professional Styling
 st.markdown("""
     <style>
-    /* 1. Eliminate the top white bar and padding */
-    [data-testid="stHeader"] {
-        background: rgba(0,0,0,0);
-    }
-    
-    .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
-        max-width: 95%; /* Gives a slight professional margin on sides */
-    }
+    /* Import High-End Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
 
-    /* 2. Edge-to-Edge Background Gradient */
+    /* 1. Full-Screen Scenic Background with Dark Overlay */
     .stApp {
-        background: linear-gradient(135deg, 
-            #1b5e20 0%,   /* Deep Forest Green */
-            #ffffff 50%,  /* Clean White */
-            #000000 100%  /* Sleek Black */
-        ) !important;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
+                    url('https://images.unsplash.com/photo-1558444479-c848259641f2?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
         background-attachment: fixed;
     }
 
-    /* 3. Typography & Professional Polish */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-    
-    html, body, [class*="st-"] {
-        font-family: 'Inter', sans-serif;
+    /* 2. Remove Streamlit default whitespace */
+    [data-testid="stHeader"] { background: transparent; }
+    .block-container { padding-top: 2rem !important; }
+
+    /* 3. Global Typography */
+    html, body, [data-testid="stMarkdownContainer"] p {
+        font-family: 'Outfit', sans-serif !important;
+        color: #f0f0f0 !important;
     }
 
-    h1 {
-        color: white !important;
+    /* 4. Glassmorphism Panels (Professional Containers) */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        margin-bottom: 25px;
+    }
+
+    /* 5. Glowing Accents */
+    .green-accent {
+        color: #4CAF50;
         font-weight: 700;
-        padding-top: 2rem; /* Adds space inside the colored area */
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
 
-    /* 4. Glassmorphism Cards for Content */
-    .stCard {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        padding: 20px;
-        border: 1px solid rgba(255,255,255,0.3);
-        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);
-        margin-bottom: 20px;
+    h1, h2, h3 {
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 700 !important;
+        color: white !important;
+    }
+
+    /* 6. Custom Metric Styling */
+    [data-testid="stMetric"] {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 15px;
+        border-radius: 12px;
+        border-left: 4px solid #4CAF50;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Implementing the Layout
-st.markdown("<h1>GreenFlow Executive Dashboard</h1>", unsafe_allow_html=True)
+# 3. Application Layout
+st.markdown('<p class="green-accent">System Online</p>', unsafe_allow_html=True)
+st.markdown('# 🌿 GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
 
-# Use columns to create a clean "Grid"
-col1, col2 = st.columns([2, 1])
+# Layout Grid
+col1, col2, col3 = st.columns([1, 1, 1])
 
 with col1:
     st.markdown("""
-    <div class="stCard">
-        <h3 style="color:#1b5e20;">System Growth Analysis</h3>
-        <p><b>Status:</b> Optimal. Your hydroponic system is performing 12% above average.</p>
+    <div class="glass-card">
+        <h3>🌱 Crop Health</h3>
+        <p style="font-weight:600;">Your cherry tomatoes are in the <b>flowering stage</b>. Nutrient uptake is optimal.</p>
+        <hr style="opacity:0.2">
+        <small>Next Harvest: 12 Days</small>
     </div>
     """, unsafe_allow_html=True)
-    # Put your charts/data here
-    st.line_chart([10, 15, 13, 17, 22])
 
 with col2:
+    st.markdown('<div class="glass-card"><h3>📊 Environment</h3>', unsafe_allow_html=True)
+    st.metric("Room Temperature", "24°C", "1.2°C")
+    st.metric("Humidity", "65%", "-2%")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col3:
     st.markdown("""
-    <div class="stCard">
-        <h3 style="color:#1b5e20;">Active Notifications</h3>
-        <ul>
-            <li><b>pH Level:</b> 6.2 (Stable)</li>
-            <li><b>Water:</b> 85% (Optimal)</li>
-        </ul>
+    <div class="glass-card">
+        <h3>🛡️ Smart Alerts</h3>
+        <p>✅ All sensors calibrated</p>
+        <p>✅ pH stable at 6.2</p>
+        <p style="color:#FFC107;">⚠️ Water reservoir at 40%</p>
     </div>
     """, unsafe_allow_html=True)
