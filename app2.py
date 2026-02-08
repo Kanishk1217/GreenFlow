@@ -106,7 +106,7 @@ if 'user_garden' not in st.session_state:
         {"type": "basil", "planted_at": datetime.now() - timedelta(days=20)},
     ]
 if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = [{"role": "assistant", "content": "Hi! Ask me anything about your hydroponic setup."}]
+    st.session_state.chat_history = [{"role": "assistant", "content": "Hi! Ask me anything about your setup."}]
 
 # ==========================================
 # 3. HELPER FUNCTIONS
@@ -318,7 +318,7 @@ elif menu == "Settings":
         st.rerun()
 # 1. CONFIGURATION (Must be the first Streamlit command)
 st.set_page_config(
-    page_title="GreenFlow Hydroponics",
+    page_title="GreenFlow",
     page_icon="🌿",
     layout="wide",
     initial_sidebar_state="expanded"
