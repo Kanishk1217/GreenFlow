@@ -326,52 +326,76 @@ st.set_page_config(
 
 # 2. CUSTOM STYLE INJECTION (The "Fancy" Part)
 
+import streamlit as st
 
-# 2. Professional White Styling
+# 1. Setup
+st.set_page_config(layout="wide", page_title="GreenFlow | Premium Hydroponics")
+
+# 2. Professional Styling (White Body, Black Sidebar)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
 
-    /* 1. Pure White Background */
+    /* --- MAIN APP AREA (White) --- */
     .stApp {
         background: #FFFFFF !important;
     }
 
-    /* 2. Adjust Text for High Contrast on White */
+    /* Global Typography */
     html, body, [data-testid="stMarkdownContainer"] p {
         font-family: 'Outfit', sans-serif !important;
-        color: #2D3436 !important; /* Professional Dark Grey */
+        color: #2D3436 !important;
     }
 
-    /* 3. Clean Card UI (Replaces Glassmorphism) */
+    /* Professional Card UI */
     .glass-card {
         background: #FFFFFF;
-        border: 1px solid #E0E0E0; /* Subtle border */
+        border: 1px solid #E0E0E0;
         border-radius: 16px;
         padding: 30px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft professional shadow */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         margin-bottom: 25px;
     }
 
-    /* 4. Headings - Deep Green for Branding */
     h1, h2, h3 {
         font-family: 'Outfit', sans-serif !important;
         font-weight: 700 !important;
-        color: #1B5E20 !important;
+        color: #1B5E20 !important; /* Brand Green */
     }
 
-    /* 5. Metrics styling for white background */
+    /* --- SIDEBAR AREA (Black) --- */
+    [data-testid="stSidebar"] {
+        background-color: #000000 !important;
+        color: white !important;
+    }
+
+    /* Sidebar Text and Labels */
+    [data-testid="stSidebar"] .stText, 
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] .stMarkdown p {
+        color: white !important;
+        font-family: 'Outfit', sans-serif !important;
+    }
+
+    /* Sidebar Radio Buttons / Navigation */
+    [data-testid="stSidebar"] .st-eb {
+        color: white !important;
+    }
+
+    /* Sidebar Header */
+    [data-testid="stSidebar"] h1 {
+        color: #4CAF50 !important; /* Green title in black sidebar */
+        font-size: 1.5rem !important;
+    }
+
+    /* --- ELEMENTS --- */
     [data-testid="stMetric"] {
         background: #F8F9FA !important;
         padding: 15px;
         border-radius: 12px;
         border-left: 4px solid #4CAF50;
-        border-top: 1px solid #E0E0E0;
-        border-right: 1px solid #E0E0E0;
-        border-bottom: 1px solid #E0E0E0;
     }
 
-    /* 6. Glowing Accents */
     .green-accent {
         color: #4CAF50;
         font-weight: 700;
@@ -383,3 +407,10 @@ st.markdown("""
     .block-container { padding-top: 2rem !important; }
     </style>
     """, unsafe_allow_html=True)
+
+# --- SIDEBAR CONTENT ---
+with st.sidebar:
+    st.markdown("# 🌿 GreenFlow")
+    st.write("Management Suite")
+    st.divider()
+    menu = st.radio("Navigation", ["Dashboard", "My Garden", "Store", "AI Expert
