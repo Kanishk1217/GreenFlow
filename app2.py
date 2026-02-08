@@ -80,7 +80,7 @@ PACKAGES = {
 # --- Merged Data: Chatbot Logic ---
 BOT_RESPONSES = {
     'hello': 'Hello! Welcome to GreenFlow. How can I help you grow today?',
-    'water': 'For hydroponics, maintain pH between 5.5-6.5. Change water every 3-4 weeks.',
+    'water': 'For , maintain pH between 5.5-6.5. Change water every 3-4 weeks.',
     'light': 'Most plants need 12-16 hours of LED light daily. Keep lights 12-24 inches away.',
     'ph': 'Ideal pH is usually 5.8-6.5. If too high, use pH Down; if too low, use pH Up.',
     'pest': 'Use organic neem oil spray. Ensure good air circulation to prevent mold.',
