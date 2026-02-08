@@ -154,7 +154,7 @@ else:
 
 # --- Page: LOGIN / REGISTER ---
 if menu == "Login":
-    st.title("Welcome to GreenFlow Hydroponics")
+    st.title("Welcome to GreenFlow")
     st.subheader("Smart Farming for Urban Spaces")
     
     tab1, tab2 = st.tabs(["Login", "Register"])
@@ -249,7 +249,7 @@ elif menu == "My Garden":
 
 # --- Page: STORE ---
 elif menu == "Store":
-    st.title("🛒 Hydroponic Kits")
+    st.title("🛒 Subscription Kits")
     st.write("Choose a package to start your sustainable farming journey.")
     
     cols = st.columns(3)
