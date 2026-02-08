@@ -325,54 +325,90 @@ st.set_page_config(
 )
 
 # 2. CUSTOM STYLE INJECTION (The "Fancy" Part)
+
+# 1. Page Config
+st.set_page_config(layout="wide", page_title="GreenFlow Premium")
+
+# 2. Advanced CSS for Layout & Glassmorphism
 st.markdown("""
     <style>
-    /* Import Premium Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
+    /* Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
 
-    /* Background: Green-White-Black Gradient */
-    .stApp {
-        background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 50%, #121212 100%);
-        background-attachment: fixed;
+    html, body, [data-testid="stAppViewContainer"] {
+        font-family: 'Outfit', sans-serif;
+        background: radial-gradient(circle at top left, #1e3a1e, #0a0a0a); /* Deep Green to Black */
+        color: white;
     }
 
-    /* Headings: Bold, Professional Green */
-    h1, h2, h3 {
-        font-family: 'Montserrat', sans-serif !important;
-        color: #2e7d32 !important;
-        letter-spacing: -0.5px;
+    /* Glass Container */
+    .bento-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 25px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .bento-card:hover {
+        border: 1px solid rgba(76, 175, 80, 0.5);
+        background: rgba(255, 255, 255, 0.08);
     }
 
-    /* Description Text: Bold and Clean */
-    .stMarkdown p, .plant-desc {
-        font-family: 'Open Sans', sans-serif !important;
-        font-weight: 600 !important;
-        color: #333333;
+    /* Custom Header */
+    .main-header {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(to right, #4cf550, #ffffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 30px;
     }
 
-    /* Card Styling */
-    div[data-testid="stVerticalBlock"] > div[style*="border: 1px solid"] {
-        background-color: rgba(255, 255, 255, 0.9) !important;
-        border-radius: 15px !important;
-        border: 1px solid #e0e0e0 !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-        padding: 20px !important;
-    }
-
-    /* Sidebar Customization */
-    [data-testid="stSidebar"] {
-        background-color: #000000 !important;
-    }
-    [data-testid="stSidebar"] * {
-        color: #ffffff !important;
-    }
-
-    /* Metrics Styling */
-    [data-testid="stMetricValue"] {
-        font-family: 'Montserrat', sans-serif !important;
-        color: #1b5e20 !important;
+    /* Remove Streamlit default padding */
+    .block-container {
+        padding-top: 2rem !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# ... [Rest of your code: PLANTS_DB, PACKAGES, Session State, etc.] ...
+# 3. The New Layout Structure
+st.markdown('<h1 class="main-header">GreenFlow OS 2.0</h1>', unsafe_allow_html=True)
+
+# Top Row: Bento Grid (3 Columns)
+col_left, col_mid, col_right = st.columns([1, 2, 1])
+
+with col_left:
+    st.markdown("""<div class="bento-card">
+        <h3>🌱 Live Status</h3>
+        <p style="color: #4cf550; font-weight: bold;">SYSTEM ACTIVE</p>
+        <small>Next nutrient cycle: 14m</small>
+    </div>""", unsafe_allow_html=True)
+    
+    st.markdown("""<div class="bento-card">
+        <h3>🔋 Power</h3>
+        <p>98% Efficiency</p>
+    </div>""", unsafe_allow_html=True)
+
+with col_mid:
+    # Main visual or chart area
+    st.markdown('<div class="bento-card">', unsafe_allow_html=True)
+    st.subheader("Growth Velocity")
+    # Placeholder for a chart
+    st.line_chart([1, 3, 5, 4, 6, 8, 7, 10])
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col_right:
+    st.markdown("""<div class="bento-card" style="height: 100%;">
+        <h3>📋 Alerts</h3>
+        <ul style="font-size: 0.8rem; list-style: none; padding: 0;">
+            <li style="margin-bottom: 10px;">🟢 pH Stabilized</li>
+            <li style="margin-bottom: 10px;">🟡 Water Level Low</li>
+            <li>🔴 Sensor 4 Offline</li>
+        </ul>
+    </div>""", unsafe_allow_html=True)
+
+# Bottom Row
+st.markdown('<div class="bento-card"><h3>🌿 Crop Distribution</h3></div>', unsafe_allow_html=True)
