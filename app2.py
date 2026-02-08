@@ -331,93 +331,84 @@ import streamlit as st
 # 1. Setup
 st.set_page_config(layout="wide", page_title="GreenFlow | Premium Hydroponics")
 
-# 2. Professional Styling (White Body, Black Sidebar)
+# 2. Final Polished Styling
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
 
-    /* --- MAIN APP AREA (White) --- */
-    .stApp {
-        background: #FFFFFF !important;
-    }
-
-    /* Global Typography */
+    /* --- MAIN APP AREA --- */
+    .stApp { background: #FFFFFF !important; }
+    
     html, body, [data-testid="stMarkdownContainer"] p {
         font-family: 'Outfit', sans-serif !important;
         color: #2D3436 !important;
     }
 
-    /* Professional Card UI */
     .glass-card {
         background: #FFFFFF;
         border: 1px solid #E0E0E0;
         border-radius: 16px;
-        padding: 30px;
+        padding: 25px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
 
     h1, h2, h3 {
         font-family: 'Outfit', sans-serif !important;
-        font-weight: 700 !important;
-        color: #1B5E20 !important; /* Brand Green */
+        color: #1B5E20 !important;
     }
 
-    /* --- SIDEBAR AREA (Black) --- */
+    /* --- SIDEBAR RE-DESIGN (Pure Black & High Contrast) --- */
     [data-testid="stSidebar"] {
         background-color: #000000 !important;
-        color: white !important;
     }
 
-    /* Sidebar Text and Labels */
-    [data-testid="stSidebar"] .stText, 
-    [data-testid="stSidebar"] label, 
-    [data-testid="stSidebar"] .stMarkdown p {
-        color: white !important;
+    /* Target EVERY piece of text in the sidebar to be White */
+    [data-testid="stSidebar"] *, 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] small, 
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] div {
+        color: #FFFFFF !important;
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* Sidebar Radio Buttons / Navigation */
-    [data-testid="stSidebar"] .st-eb {
-        color: white !important;
+    /* Specifically target the radio button labels which often stay grey */
+    [data-testid="stWidgetLabel"] p {
+        color: #FFFFFF !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
     }
 
-    /* Sidebar Header */
-    [data-testid="stSidebar"] h1 {
-        color: #4CAF50 !important; /* Green title in black sidebar */
-        font-size: 1.5rem !important;
-    }
+    /* Sidebar Divider */
+    hr { border-top: 1px solid #333 !important; }
 
-    /* --- ELEMENTS --- */
-    [data-testid="stMetric"] {
-        background: #F8F9FA !important;
-        padding: 15px;
-        border-radius: 12px;
-        border-left: 4px solid #4CAF50;
-    }
+    /* Metric Styling */
+    [data-testid="stMetricValue"] { color: #1B5E20 !important; font-weight: 700 !important; }
 
-    .green-accent {
-        color: #4CAF50;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
-
-    [data-testid="stHeader"] { background: transparent; }
+    /* Header padding */
     .block-container { padding-top: 2rem !important; }
+    [data-testid="stHeader"] { background: transparent; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- SIDEBAR CONTENT ---
+# --- SIDEBAR CONTENT (Fixed Double Title) ---
+# Removed st.markdown("# 🌿 GreenFlow") from here to avoid the double title
 with st.sidebar:
-    st.markdown("# 🌿 GreenFlow")
-    st.write("Management Suite")
+    st.markdown("<h2 style='color:#4CAF50 !important; margin-top:0;'>🌿 GreenFlow</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='opacity:0.8; font-size:0.9rem;'>Premium Hydroponics OS</p>", unsafe_allow_html=True)
     st.divider()
-    menu = st.radio("Navigation", ["Dashboard", "My Garden", "Store", "AI Expert"])
+    
+    # Navigation
+    menu = st.radio("MAIN MENU", ["Dashboard", "My Garden", "Store", "AI Expert", "Settings"])
+    
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("<small>System Version 2.0.4</small>", unsafe_allow_html=True)
 
 # --- MAIN PAGE CONTENT ---
-st.markdown('<p class="green-accent">System Online</p>', unsafe_allow_html=True)
-st.markdown('# 🌿 GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
+st.markdown('<p style="color:#4CAF50; font-weight:700; letter-spacing:2px;">SYSTEM ONLINE</p>', unsafe_allow_html=True)
+st.markdown('# GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1, 1, 1])
 
@@ -425,24 +416,23 @@ with col1:
     st.markdown("""
     <div class="glass-card">
         <h3>🌱 Crop Health</h3>
-        <p style="font-weight:600;">Your cherry tomatoes are in the <b>flowering stage</b>.</p>
-        <hr style="opacity:0.2">
-        <small>Next Harvest: 12 Days</small>
+        <p>Your cherry tomatoes are in the <b>flowering stage</b>. Light exposure is optimal.</p>
+        <small style="color:#666;">Next Nutrient Flush: 2 Days</small>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
     st.markdown('<div class="glass-card"><h3>📊 Environment</h3>', unsafe_allow_html=True)
-    st.metric("Room Temp", "24°C", "1.2°C")
-    st.metric("Humidity", "65%", "-2%")
+    st.metric("Room Temp", "24.5°C", "0.5°C")
+    st.metric("Humidity", "62%", "-1%")
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col3:
     st.markdown("""
     <div class="glass-card">
-        <h3>🛡️ Smart Alerts</h3>
-        <p>✅ All sensors calibrated</p>
-        <p>✅ pH stable at 6.2</p>
-        <p style="color:#d32f2f; font-weight:bold;">⚠️ Reservoir Low (40%)</p>
+        <h3>🛡️ Alerts</h3>
+        <p style="margin:0;">✅ Sensors: Active</p>
+        <p style="margin:0;">✅ pH: 6.2</p>
+        <p style="margin:0; color:#d32f2f; font-weight:bold;">⚠️ Reservoir: 40%</p>
     </div>
     """, unsafe_allow_html=True)
