@@ -7,7 +7,7 @@ import random
 # 1. CONFIGURATION & ASSETS
 # ==========================================
 st.set_page_config(
-    page_title="GreenFlow Hydroponics",
+    page_title="GreenFlow",
     page_icon="🌿",
     layout="wide",
     initial_sidebar_state="expanded"
