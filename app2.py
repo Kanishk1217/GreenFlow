@@ -326,7 +326,12 @@ st.set_page_config(
 
 # 2. CUSTOM STYLE INJECTION (The "Fancy" Part)
 
-# 2. Final Polished Styling (REPLACE YOUR OLD CSS WITH THIS)
+import streamlit as st
+
+# 1. Setup
+st.set_page_config(layout="wide", page_title="GreenFlow | Premium Hydroponics")
+
+# 2. Final Polished Styling
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
@@ -353,27 +358,31 @@ st.markdown("""
         color: #1B5E20 !important;
     }
 
-    /* --- SIDEBAR RE-DESIGN (Fixing the Icon Error) --- */
+    /* --- SIDEBAR RE-DESIGN (Pure Black & High Contrast) --- */
     [data-testid="stSidebar"] {
         background-color: #000000 !important;
     }
 
-    /* Target text but DO NOT touch the Material Icon spans */
-    [data-testid="stSidebar"] *:not(span):not(i) {
+    /* Target EVERY piece of text in the sidebar to be White */
+    [data-testid="stSidebar"] *, 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] small, 
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] div {
         color: #FFFFFF !important;
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* Specific fix for the collapse icon text error */
-    [data-testid="stIconMaterial"] {
-        font-family: 'Material Symbols Outlined' !important;
-    }
-
-    /* Keep the radio button text bright white */
-    div[data-testid="stWidgetLabel"] p {
+    /* Specifically target the radio button labels which often stay grey */
+    [data-testid="stWidgetLabel"] p {
         color: #FFFFFF !important;
+        font-size: 1.1rem !important;
         font-weight: 600 !important;
     }
+
+    /* Sidebar Divider */
+    hr { border-top: 1px solid #333 !important; }
 
     /* Metric Styling */
     [data-testid="stMetricValue"] { color: #1B5E20 !important; font-weight: 700 !important; }
@@ -382,4 +391,48 @@ st.markdown("""
     .block-container { padding-top: 2rem !important; }
     [data-testid="stHeader"] { background: transparent; }
     </style>
+    """, unsafe_allow_html=True)
+
+# --- SIDEBAR CONTENT (Fixed Double Title) ---
+# Removed st.markdown("# 🌿 GreenFlow") from here to avoid the double title
+with st.sidebar:
+    st.markdown("<h2 style='color:#4CAF50 !important; margin-top:0;'>🌿 GreenFlow</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='opacity:0.8; font-size:0.9rem;'>Premium Hydroponics OS</p>", unsafe_allow_html=True)
+    st.divider()
+    
+    # Navigation
+    menu = st.radio("MAIN MENU", ["Dashboard", "My Garden", "Store", "AI Expert", "Settings"])
+    
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("<small>System Version 2.0.4</small>", unsafe_allow_html=True)
+
+# --- MAIN PAGE CONTENT ---
+st.markdown('<p style="color:#4CAF50; font-weight:700; letter-spacing:2px;">SYSTEM ONLINE</p>', unsafe_allow_html=True)
+st.markdown('# GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([1, 1, 1])
+
+with col1:
+    st.markdown("""
+    <div class="glass-card">
+        <h3>🌱 Crop Health</h3>
+        <p>Your cherry tomatoes are in the <b>flowering stage</b>. Light exposure is optimal.</p>
+        <small style="color:#666;">Next Nutrient Flush: 2 Days</small>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown('<div class="glass-card"><h3>📊 Environment</h3>', unsafe_allow_html=True)
+    st.metric("Room Temp", "24.5°C", "0.5°C")
+    st.metric("Humidity", "62%", "-1%")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div class="glass-card">
+        <h3>🛡️ Alerts</h3>
+        <p style="margin:0;">✅ Sensors: Active</p>
+        <p style="margin:0;">✅ pH: 6.2</p>
+        <p style="margin:0; color:#d32f2f; font-weight:bold;">⚠️ Reservoir: 40%</p>
+    </div>
     """, unsafe_allow_html=True)
