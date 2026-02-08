@@ -396,7 +396,6 @@ st.markdown("""
 # --- SIDEBAR CONTENT (Fixed Double Title) ---
 # Removed st.markdown("# 🌿 GreenFlow") from here to avoid the double title
 with st.sidebar:
-    st.markdown("<h2 style='color:#4CAF50 !important; margin-top:0;'>🌿 GreenFlow</h2>", unsafe_allow_html=True)
     st.markdown("<p style='opacity:0.8; font-size:0.9rem;'>Premium Hydroponics OS</p>", unsafe_allow_html=True)
     st.divider()
     
