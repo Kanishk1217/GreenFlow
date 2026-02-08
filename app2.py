@@ -435,3 +435,21 @@ with col3:
         <p style="margin:0; color:#d32f2f; font-weight:bold;">⚠️ Reservoir: 40%</p>
     </div>
     """, unsafe_allow_html=True)
+    /* --- SIDEBAR RE-DESIGN --- */
+    [data-testid="stSidebar"] {
+        background-color: #000000 !important;
+    }
+
+    /* Target text but EXCLUDE icons (Material Symbols) */
+    [data-testid="stSidebar"] *:not(span[data-testid="stIconMaterial"]), 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] label {
+        color: #FFFFFF !important;
+        font-family: 'Outfit', sans-serif !important;
+    }
+
+    /* Keep icons as the default Icon Font so they render correctly */
+    [data-testid="stIconMaterial"] {
+        font-family: 'Material Symbols Outlined' !important;
+        color: #FFFFFF !important;
+    }
