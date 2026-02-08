@@ -413,4 +413,36 @@ with st.sidebar:
     st.markdown("# 🌿 GreenFlow")
     st.write("Management Suite")
     st.divider()
-    menu = st.radio("Navigation", ["Dashboard", "My Garden", "Store", "AI Expert
+    menu = st.radio("Navigation", ["Dashboard", "My Garden", "Store", "AI Expert"])
+
+# --- MAIN PAGE CONTENT ---
+st.markdown('<p class="green-accent">System Online</p>', unsafe_allow_html=True)
+st.markdown('# 🌿 GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([1, 1, 1])
+
+with col1:
+    st.markdown("""
+    <div class="glass-card">
+        <h3>🌱 Crop Health</h3>
+        <p style="font-weight:600;">Your cherry tomatoes are in the <b>flowering stage</b>.</p>
+        <hr style="opacity:0.2">
+        <small>Next Harvest: 12 Days</small>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown('<div class="glass-card"><h3>📊 Environment</h3>', unsafe_allow_html=True)
+    st.metric("Room Temp", "24°C", "1.2°C")
+    st.metric("Humidity", "65%", "-2%")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div class="glass-card">
+        <h3>🛡️ Smart Alerts</h3>
+        <p>✅ All sensors calibrated</p>
+        <p>✅ pH stable at 6.2</p>
+        <p style="color:#d32f2f; font-weight:bold;">⚠️ Reservoir Low (40%)</p>
+    </div>
+    """, unsafe_allow_html=True)
