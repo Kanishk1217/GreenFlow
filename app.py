@@ -1,265 +1,318 @@
-from flask import Flask, render_template, request, jsonify, session
+import streamlit as st
+import time
 from datetime import datetime, timedelta
-import json
-import os
-from werkzeug.security import generate_password_hash, check_password_hash
-import secrets
+import random
 
-app = Flask(__name__)
-app.secret_key = secrets.token_hex(16)
+# ==========================================
+# 1. CONFIGURATION & ASSETS
+# ==========================================
+st.set_page_config(
+    page_title="GreenFlow Hydroponics",
+    page_icon="🌿",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# In-memory data storage (replace with database in production)
-users_db = {}
-gardens_db = {}
-chat_history = {}
-
-# Sample plant data
-PLANTS_DATA = {
+# --- Merged Data: Plant Knowledge Base ---
+PLANTS_DB = {
     "cherry_tomatoes": {
         "name": "Cherry Tomatoes",
         "days_to_harvest": 60,
         "icon": "🍅",
-        "description": "Sweet and juicy cherry tomatoes perfect for salads",
-        "water_ph": "5.8-6.5",
-        "growth_tips": "Needs plenty of sunlight and regular nutrient monitoring"
+        "ph": "5.8-6.5",
+        "tips": "Needs support stakes. Prune suckers for better yield."
     },
     "spinach": {
         "name": "Spinach",
         "days_to_harvest": 40,
         "icon": "🥬",
-        "description": "Nutrient-rich leafy green vegetable",
-        "water_ph": "6.0-7.0",
-        "growth_tips": "Grows best in cooler temperatures"
+        "ph": "6.0-7.0",
+        "tips": "Harvest outer leaves first to extend growth cycle."
     },
     "lettuce": {
         "name": "Lettuce",
         "days_to_harvest": 30,
         "icon": "🥗",
-        "description": "Crisp and fresh lettuce varieties",
-        "water_ph": "5.5-6.5",
-        "growth_tips": "Quick growing, perfect for beginners"
+        "ph": "5.5-6.5",
+        "tips": "Sensitive to heat. Keep water temp below 24°C."
     },
     "strawberry": {
         "name": "Strawberry",
         "days_to_harvest": 90,
         "icon": "🍓",
-        "description": "Sweet hydroponic strawberries",
-        "water_ph": "5.5-6.5",
-        "growth_tips": "Requires good air circulation"
+        "ph": "5.5-6.5",
+        "tips": "Hand pollination may be required indoors."
     },
     "basil": {
         "name": "Basil",
         "days_to_harvest": 25,
         "icon": "🌿",
-        "description": "Aromatic herb for cooking",
-        "water_ph": "5.5-6.5",
-        "growth_tips": "Pinch flowers to encourage leaf growth"
-    },
-    "mint": {
-        "name": "Mint",
-        "days_to_harvest": 30,
-        "icon": "🍃",
-        "description": "Refreshing herb with multiple uses",
-        "water_ph": "6.0-7.0",
-        "growth_tips": "Fast growing, prune regularly"
+        "ph": "5.5-6.5",
+        "tips": "Harvest frequently to prevent flowering."
     }
 }
 
+# --- Merged Data: Packages ---
 PACKAGES = {
-    "balcony_40": {
-        "name": "Balcony Starter (40 plants)",
-        "price": 3000,
-        "plants": 40,
-        "area": "40-60 sq ft",
-        "description": "Perfect for small balconies"
+    'starter': {
+        'name': 'Starter Kit (Balcony)',
+        'price': 9999,
+        'plants_count': 4,
+        'area': '2x2 ft',
+        'desc': 'Perfect for beginners. Includes pump, reservoir, and nutrients.'
     },
-    "balcony_60": {
-        "name": "Balcony Premium (60 plants)",
-        "price": 4500,
-        "plants": 60,
-        "area": "60-80 sq ft",
-        "description": "Enhanced balcony setup"
+    'professional': {
+        'name': 'Professional Setup',
+        'price': 24999,
+        'plants_count': 12,
+        'area': '4x4 ft',
+        'desc': 'High-yield system with automated lighting control.'
     },
-    "terrace_100": {
-        "name": "Terrace Garden (100 plants)",
-        "price": 6000,
-        "plants": 100,
-        "area": "100-150 sq ft",
-        "description": "Full terrace hydroponics system"
+    'commercial': {
+        'name': 'Commercial System',
+        'price': 59999,
+        'plants_count': 30,
+        'area': '8x8 ft',
+        'desc': 'Full-scale farm setup with IoT monitoring capabilities.'
     }
 }
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# --- Merged Data: Chatbot Logic ---
+BOT_RESPONSES = {
+    'hello': 'Hello! Welcome to GreenFlow. How can I help you grow today?',
+    'water': 'For hydroponics, maintain pH between 5.5-6.5. Change water every 3-4 weeks.',
+    'light': 'Most plants need 12-16 hours of LED light daily. Keep lights 12-24 inches away.',
+    'ph': 'Ideal pH is usually 5.8-6.5. If too high, use pH Down; if too low, use pH Up.',
+    'pest': 'Use organic neem oil spray. Ensure good air circulation to prevent mold.',
+    'cost': 'Starter kits begin at ₹9,999. Check the "Store" tab for details.',
+    'default': 'That is a great question! I recommend booking a consultation with our experts for specific advice.'
+}
 
-@app.route('/api/register', methods=['POST'])
-def register():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    name = data.get('name')
-    
-    if email in users_db:
-        return jsonify({'success': False, 'message': 'User already exists'})
-    
-    users_db[email] = {
-        'name': name,
-        'password': generate_password_hash(password),
-        'created_at': datetime.now().isoformat(),
-        'preferences': {},
-        'subscription': None
-    }
-    
-    session['user'] = email
-    return jsonify({'success': True, 'user': {'name': name, 'email': email}})
+# ==========================================
+# 2. SESSION STATE MANAGEMENT
+# ==========================================
+# Initialize "In-Memory Database"
+if 'users_db' not in st.session_state:
+    st.session_state.users_db = {"demo@greenflow.com": {"name": "Demo User", "password": "password123", "subscription": False}}
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+if 'current_user' not in st.session_state:
+    st.session_state.current_user = None
+if 'user_garden' not in st.session_state:
+    # Pre-populate with some data for demo
+    st.session_state.user_garden = [
+        {"type": "cherry_tomatoes", "planted_at": datetime.now() - timedelta(days=45)},
+        {"type": "lettuce", "planted_at": datetime.now() - timedelta(days=10)},
+        {"type": "basil", "planted_at": datetime.now() - timedelta(days=20)},
+    ]
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = [{"role": "assistant", "content": "Hi! Ask me anything about your hydroponic setup."}]
 
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    
-    if email not in users_db:
-        return jsonify({'success': False, 'message': 'User not found'})
-    
-    if not check_password_hash(users_db[email]['password'], password):
-        return jsonify({'success': False, 'message': 'Invalid password'})
-    
-    session['user'] = email
-    user_data = {
-        'name': users_db[email]['name'],
-        'email': email,
-        'subscription': users_db[email].get('subscription')
-    }
-    return jsonify({'success': True, 'user': user_data})
+# ==========================================
+# 3. HELPER FUNCTIONS
+# ==========================================
+def login_user(email, password):
+    user = st.session_state.users_db.get(email)
+    if user and user['password'] == password:
+        st.session_state.logged_in = True
+        st.session_state.current_user = user
+        st.success("Login successful!")
+        time.sleep(0.5)
+        st.rerun()
+    else:
+        st.error("Invalid email or password")
 
-@app.route('/api/user', methods=['GET'])
-def get_user():
-    if 'user' not in session:
-        return jsonify({'success': False})
-    
-    email = session['user']
-    user_data = {
-        'name': users_db[email]['name'],
-        'email': email,
-        'subscription': users_db[email].get('subscription'),
-        'preferences': users_db[email].get('preferences', {})
-    }
-    return jsonify({'success': True, 'user': user_data})
+def register_user(email, name, password):
+    if email in st.session_state.users_db:
+        st.error("User already exists!")
+    else:
+        st.session_state.users_db[email] = {"name": name, "password": password, "subscription": False}
+        st.success("Account created! Please log in.")
 
-@app.route('/api/logout', methods=['POST'])
-def logout():
-    session.pop('user', None)
-    return jsonify({'success': True})
+def get_bot_response(user_input):
+    user_input = user_input.lower()
+    for key, response in BOT_RESPONSES.items():
+        if key in user_input:
+            return response
+    return BOT_RESPONSES['default']
 
-@app.route('/api/garden/create', methods=['POST'])
-def create_garden():
-    if 'user' not in session:
-        return jsonify({'success': False, 'message': 'Not logged in'})
-    
-    data = request.json
-    email = session['user']
-    
-    garden_id = f"garden_{len(gardens_db) + 1}"
-    gardens_db[garden_id] = {
-        'owner': email,
-        'name': data.get('name', 'My Garden'),
-        'package': data.get('package'),
-        'plants': data.get('plants', []),
-        'created_at': datetime.now().isoformat(),
-        'status': 'active'
-    }
-    
-    return jsonify({'success': True, 'garden_id': garden_id})
+# ==========================================
+# 4. MAIN UI LAYOUT
+# ==========================================
 
-@app.route('/api/garden/<garden_id>', methods=['GET'])
-def get_garden(garden_id):
-    if garden_id not in gardens_db:
-        return jsonify({'success': False, 'message': 'Garden not found'})
+# --- Sidebar Navigation ---
+st.sidebar.title("🌿 GreenFlow")
+if st.session_state.logged_in:
+    st.sidebar.write(f"Welcome, **{st.session_state.current_user['name']}**!")
+    menu = st.sidebar.radio("Navigate", ["Dashboard", "My Garden", "Store", "AI Expert", "Consultation", "Settings"])
+    if st.sidebar.button("Logout"):
+        st.session_state.logged_in = False
+        st.session_state.current_user = None
+        st.rerun()
+else:
+    menu = "Login"
+
+# --- Page: LOGIN / REGISTER ---
+if menu == "Login":
+    st.title("Welcome to GreenFlow Hydroponics")
+    st.subheader("Smart Farming for Urban Spaces")
     
-    garden = gardens_db[garden_id]
-    plants_with_data = []
+    tab1, tab2 = st.tabs(["Login", "Register"])
     
-    for plant in garden['plants']:
-        plant_info = PLANTS_DATA.get(plant['type'], {})
-        planted_date = datetime.fromisoformat(garden['created_at'])
-        days_elapsed = (datetime.now() - planted_date).days
-        days_remaining = plant_info.get('days_to_harvest', 60) - days_elapsed
+    with tab1:
+        with st.form("login_form"):
+            email = st.text_input("Email")
+            password = st.text_input("Password", type="password")
+            submitted = st.form_submit_button("Login")
+            if submitted:
+                login_user(email, password)
+        st.info("Demo Account: demo@greenflow.com / password123")
+
+    with tab2:
+        with st.form("register_form"):
+            new_name = st.text_input("Full Name")
+            new_email = st.text_input("Email")
+            new_pass = st.text_input("Password", type="password")
+            reg_submitted = st.form_submit_button("Register")
+            if reg_submitted:
+                if new_name and new_email and new_pass:
+                    register_user(new_email, new_name, new_pass)
+                else:
+                    st.warning("All fields are required.")
+
+# --- Page: DASHBOARD ---
+elif menu == "Dashboard":
+    st.title("📊 System Overview")
+    
+    # Mock Sensor Data
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("Temperature", "24°C", "1.2°C")
+    with col2:
+        st.metric("Humidity", "65%", "-2%")
+    with col3:
+        st.metric("Water pH", "6.2", "OK")
+    with col4:
+        st.metric("TDS / EC", "850 ppm", "Normal")
+
+    st.markdown("### 🔔 Alerts")
+    st.warning("⚠️ Tank water level is at 40%. Consider refilling in 2 days.")
+    
+    st.markdown("### 📈 Growth Trends")
+    # Simple chart
+    chart_data = {"Week": [1, 2, 3, 4], "Height (cm)": [5, 12, 18, 25]}
+    st.line_chart(chart_data, x="Week", y="Height (cm)")
+
+# --- Page: MY GARDEN ---
+elif menu == "My Garden":
+    st.title("🌱 My Garden Status")
+    
+    if not st.session_state.user_garden:
+        st.info("Your garden is empty. Visit the Store to get started!")
+    else:
+        grid_cols = st.columns(3)
+        for i, plant in enumerate(st.session_state.user_garden):
+            plant_info = PLANTS_DB.get(plant['type'], {})
+            
+            # Calculate progress
+            days_passed = (datetime.now() - plant['planted_at']).days
+            total_days = plant_info.get('days_to_harvest', 60)
+            progress = min(1.0, days_passed / total_days)
+            
+            with grid_cols[i % 3]:
+                with st.container(border=True):
+                    st.markdown(f"### {plant_info.get('icon', '🌱')} {plant_info.get('name', 'Unknown')}")
+                    st.progress(progress, text=f"{days_passed}/{total_days} Days")
+                    
+                    if progress >= 1.0:
+                        st.success("🎉 Ready to Harvest!")
+                    else:
+                        st.caption(f"Harvest in approx. {total_days - days_passed} days")
+                    
+                    with st.expander("Care Tips"):
+                        st.write(f"**pH Range:** {plant_info.get('ph')}")
+                        st.write(plant_info.get('tips'))
+
+        # Add new plant interface
+        st.markdown("---")
+        st.subheader("Add New Plant")
+        with st.form("add_plant"):
+            new_plant_type = st.selectbox("Select Plant Type", list(PLANTS_DB.keys()), format_func=lambda x: PLANTS_DB[x]['name'])
+            if st.form_submit_button("Plant Seed"):
+                st.session_state.user_garden.append({
+                    "type": new_plant_type,
+                    "planted_at": datetime.now()
+                })
+                st.success(f"Added {PLANTS_DB[new_plant_type]['name']} to your garden!")
+                time.sleep(1)
+                st.rerun()
+
+# --- Page: STORE ---
+elif menu == "Store":
+    st.title("🛒 Hydroponic Kits")
+    st.write("Choose a package to start your sustainable farming journey.")
+    
+    cols = st.columns(3)
+    for idx, (key, pkg) in enumerate(PACKAGES.items()):
+        with cols[idx]:
+            with st.container(border=True):
+                st.header(pkg['name'])
+                st.subheader(f"₹{pkg['price']:,}")
+                st.write(f"**Plants:** {pkg['plants_count']}")
+                st.write(f"**Area:** {pkg['area']}")
+                st.write(pkg['desc'])
+                if st.button(f"Buy {pkg['name']}", key=key):
+                    st.balloons()
+                    st.success(f"Thank you! The {pkg['name']} will be shipped to your address.")
+
+# --- Page: AI EXPERT ---
+elif menu == "AI Expert":
+    st.title("🤖 GreenFlow Assistant")
+    
+    # Display chat history
+    for message in st.session_state.chat_history:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    # Chat input
+    if prompt := st.chat_input("Ask about pH, lighting, pests, or watering..."):
+        # User message
+        st.session_state.chat_history.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        # Bot response
+        time.sleep(0.5) # Simulate thinking
+        response_text = get_bot_response(prompt)
         
-        plants_with_data.append({
-            'type': plant['type'],
-            'name': plant_info.get('name', plant['type']),
-            'icon': plant_info.get('icon', '🌱'),
-            'days_remaining': max(0, days_remaining),
-            'growth_percentage': min(100, (days_elapsed / plant_info.get('days_to_harvest', 60)) * 100),
-            'days_elapsed': days_elapsed
-        })
-    
-    return jsonify({
-        'success': True,
-        'garden': {
-            **garden,
-            'plants': plants_with_data
-        }
-    })
+        st.session_state.chat_history.append({"role": "assistant", "content": response_text})
+        with st.chat_message("assistant"):
+            st.markdown(response_text)
 
-@app.route('/api/chat', methods=['POST'])
-def chat():
-    data = request.json
-    message = data.get('message', '').lower()
+# --- Page: CONSULTATION ---
+elif menu == "Consultation":
+    st.title("📞 Book an Expert")
+    st.write("Need hands-on help? Schedule a visit.")
     
-    # Simple rule-based chatbot
-    responses = {
-        'hello': 'Hello! I\'m your GreenFlow assistant. How can I help you with your hydroponic garden today?',
-        'hi': 'Hi there! Ready to grow something amazing?',
-        'help': 'I can help you with plant care, watering schedules, nutrient management, and troubleshooting. What would you like to know?',
-        'water': 'For hydroponics, maintain pH between 5.5-6.5. Check water levels daily and top up as needed. The system uses about 1-2 liters per plant per week.',
-        'nutrient': 'Add nutrients every 2 weeks. Use a balanced NPK formula designed for hydroponics. Start with half strength and adjust based on plant response.',
-        'ph': 'Ideal pH for most hydroponic plants is 5.8-6.5. Test daily using pH strips or a digital meter. Adjust with pH up or down solutions.',
-        'light': 'Most vegetables need 12-16 hours of light daily. Use full-spectrum LED grow lights if natural sunlight is insufficient.',
-        'harvest': 'Harvest times vary by plant. Lettuce: 30 days, Spinach: 40 days, Tomatoes: 60 days. Check your plant\'s specific timeline in the app!',
-        'pest': 'Use organic neem oil spray for common pests. Maintain good air circulation. Inspect plants weekly for early signs of issues.',
-        'price': 'Our packages start at ₹3,000 for 40 plants. Installation includes setup, plants, and 1 month support. Subscription is ₹499/month.',
-        'subscription': 'Our ₹499/month subscription includes: weekly tips, priority support, plant replacement warranty, and expert consultations.',
-        'book': 'You can book a consultation visit for ₹200. Our expert will visit your space, assess sunlight and feasibility, and recommend the best setup!'
-    }
-    
-    # Find matching response
-    response = 'I\'m not sure about that. Could you ask about watering, nutrients, pH, lighting, harvest times, pests, pricing, or booking a consultation?'
-    
-    for keyword, resp in responses.items():
-        if keyword in message:
-            response = resp
-            break
-    
-    return jsonify({'success': True, 'response': response})
+    with st.form("consultation_form"):
+        c_name = st.text_input("Name", value=st.session_state.current_user['name'])
+        c_phone = st.text_input("Phone Number")
+        c_date = st.date_input("Preferred Date")
+        c_reason = st.text_area("What do you need help with?")
+        
+        if st.form_submit_button("Book Appointment"):
+            st.success("Booking Confirmed! Our team will contact you within 24 hours.")
+            st.info(f"Ref ID: GF-{random.randint(1000,9999)}")
 
-@app.route('/api/packages', methods=['GET'])
-def get_packages():
-    return jsonify({'success': True, 'packages': PACKAGES})
-
-@app.route('/api/plants', methods=['GET'])
-def get_plants():
-    return jsonify({'success': True, 'plants': PLANTS_DATA})
-
-@app.route('/api/subscribe', methods=['POST'])
-def subscribe():
-    if 'user' not in session:
-        return jsonify({'success': False, 'message': 'Not logged in'})
+# --- Page: SETTINGS ---
+elif menu == "Settings":
+    st.title("⚙️ Account Settings")
+    st.write(f"**Email:** {st.session_state.current_user.get('email', 'N/A')}")
+    st.write(f"**Member Since:** {datetime.now().strftime('%B %Y')}")
     
-    email = session['user']
-    users_db[email]['subscription'] = {
-        'plan': 'premium',
-        'price': 499,
-        'started_at': datetime.now().isoformat()
-    }
+    st.checkbox("Receive weekly plant care tips via email", value=True)
+    st.checkbox("Enable SMS alerts for water levels", value=False)
     
-    return jsonify({'success': True, 'message': 'Subscription activated!'})
-
-if __name__ == '__main__':
-    # Create templates directory
-    os.makedirs('templates', exist_ok=True)
-    os.makedirs('static', exist_ok=True)
-    
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    if st.button("Clear App Data (Reset Demo)"):
+        st.session_state.clear()
+        st.rerun()
