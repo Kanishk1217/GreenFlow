@@ -54,13 +54,44 @@ st.markdown("""
     /* --- MAIN APP BACKGROUND --- */
     .stApp { background: #FFFFFF !important; }
     
-    /* --- TEXT VISIBILITY FIX (Global Dark Text) --- */
-    /* This forces all paragraphs, headers, and labels to be dark grey */
-    html, body, p, label, .stMarkdown, .stCheckbox, span {
+    /* --- TEXT VISIBILITY FIX (Global Dark Text for appropriate elements) --- */
+    /* This forces paragraphs, headers, and labels to be dark grey, excluding buttons */
+    html, body, p, label, .stMarkdown, .stCheckbox, span, .stWrite {
         font-family: 'Outfit', sans-serif !important;
         color: #2D3436 !important;
     }
     
+    /* --- BUTTON STYLING FIX (White text on dark background) --- */
+    /* Purchase Now buttons and Reset button styling */
+    button[kind="secondary"] {
+        color: #FFFFFF !important;
+        background-color: #1B5E20 !important;
+        border: 1px solid #1B5E20 !important;
+    }
+    
+    button[kind="secondary"]:hover {
+        background-color: #145A1F !important;
+        border: 1px solid #145A1F !important;
+    }
+    
+    /* Streamlit button container fix */
+    .stButton > button {
+        color: #FFFFFF !important;
+        background-color: #1B5E20 !important;
+        border: 1px solid #1B5E20 !important;
+        font-weight: 600 !important;
+        padding: 12px 24px !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #145A1F !important;
+        border: 1px solid #145A1F !important;
+    }
+    
+    .stButton > button:active {
+        background-color: #0D3A14 !important;
+    }
+
     /* Exceptions: Sidebar text and Metrics need specific colors */
     [data-testid="stSidebar"] * { color: #FFFFFF !important; }
     [data-testid="stMetricValue"] { color: #1B5E20 !important; }
@@ -89,6 +120,16 @@ st.markdown("""
     /* --- SIDEBAR --- */
     [data-testid="stSidebar"] { background-color: #000000 !important; }
     [data-testid="stIconMaterial"] { font-family: 'Material Symbols Outlined' !important; } /* Fix Icon */
+
+    /* --- CHAT MESSAGE STYLING --- */
+    /* Ensure chat messages are readable */
+    .stChatMessage {
+        font-family: 'Outfit', sans-serif !important;
+    }
+    
+    .stChatMessage > div > p, .stChatMessage > div > span {
+        color: #2D3436 !important;
+    }
 
     /* Padding Fix */
     .block-container { padding-top: 2rem !important; }
@@ -210,12 +251,13 @@ elif menu == "Store":
 elif menu == "AI Expert":
     st.markdown("<h1>🤖 AI Expert Assistant</h1>", unsafe_allow_html=True)
     
-    # Chat Logic Restored
+    # Chat History Display
     for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if prompt := st.chat_input("Ask about your plants..."):
+    # Chat Input - FIXED: Corrected placeholder text to prevent overlap
+    if prompt := st.chat_input("Ask your garden questions here..."):
         st.session_state.chat_history.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
@@ -242,6 +284,9 @@ elif menu == "Settings":
         st.checkbox("Receive weekly plant care tips via email", value=True)
         st.checkbox("Enable SMS alerts for water levels", value=False)
         
-    if st.button("Reset Application Data"):
+    st.markdown("---")
+    
+    # Reset Button - FIXED: Now has white text with proper styling
+    if st.button("Reset Application Data", use_container_width=True):
         st.session_state.clear()
         st.rerun()
