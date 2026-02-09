@@ -45,7 +45,7 @@ def get_bot_response(user_input):
     return BOT_RESPONSES['default']
 
 # ==========================================
-# 3. CSS STYLING (FIXED VISIBILITY & BORDERS)
+# 3. CSS STYLING
 # ==========================================
 st.markdown("""
     <style>
@@ -54,27 +54,13 @@ st.markdown("""
     /* --- MAIN APP BACKGROUND --- */
     .stApp { background: #FFFFFF !important; }
     
-    /* --- TEXT VISIBILITY FIX (Global Dark Text for appropriate elements) --- */
-    /* This forces paragraphs, headers, and labels to be dark grey, excluding buttons */
+    /* --- TEXT VISIBILITY FIX --- */
     html, body, p, label, .stMarkdown, .stCheckbox, span, .stWrite {
         font-family: 'Outfit', sans-serif !important;
         color: #2D3436 !important;
     }
     
-    /* --- BUTTON STYLING FIX (White text on dark background) --- */
-    /* Purchase Now buttons and Reset button styling */
-    button[kind="secondary"] {
-        color: #FFFFFF !important;
-        background-color: #1B5E20 !important;
-        border: 1px solid #1B5E20 !important;
-    }
-    
-    button[kind="secondary"]:hover {
-        background-color: #145A1F !important;
-        border: 1px solid #145A1F !important;
-    }
-    
-    /* Streamlit button container fix */
+    /* --- BUTTON STYLING FIX --- */
     .stButton > button {
         color: #FFFFFF !important;
         background-color: #1B5E20 !important;
@@ -92,13 +78,12 @@ st.markdown("""
         background-color: #0D3A14 !important;
     }
 
-    /* Exceptions: Sidebar text and Metrics need specific colors */
+    /* Exceptions: Sidebar text and Metrics */
     [data-testid="stSidebar"] * { color: #FFFFFF !important; }
     [data-testid="stMetricValue"] { color: #1B5E20 !important; }
     [data-testid="stMetricLabel"] { color: #636e72 !important; }
 
     /* --- CARD BORDER STYLING --- */
-    /* Targets any container with border=True */
     div[data-testid="stVerticalBlock"] > div[style*="border"] {
         background-color: #ffffff !important;
         border: 1px solid #d1d8e0 !important;
@@ -119,10 +104,9 @@ st.markdown("""
 
     /* --- SIDEBAR --- */
     [data-testid="stSidebar"] { background-color: #000000 !important; }
-    [data-testid="stIconMaterial"] { font-family: 'Material Symbols Outlined' !important; } /* Fix Icon */
+    [data-testid="stIconMaterial"] { font-family: 'Material Symbols Outlined' !important; }
 
-    /* --- CHAT MESSAGE STYLING (MINIMAL - LET STREAMLIT HANDLE SPACING) --- */
-    /* Keep CSS minimal - use Streamlit components for spacing */
+    /* --- CHAT STYLING --- */
     .stChatMessage {
         font-family: 'Outfit', sans-serif !important;
     }
@@ -148,7 +132,7 @@ if 'user_garden' not in st.session_state:
         {"type": "lettuce", "planted_at": datetime.now() - timedelta(days=10)},
     ]
 if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = [{"role": "assistant", "content": "Hello! Ask me about your setup."}]
+    st.session_state.chat_history = []
 
 # ==========================================
 # 5. SIDEBAR NAVIGATION
@@ -165,7 +149,7 @@ with st.sidebar:
     st.divider()
     menu = st.radio("MAIN MENU", ["System Overview", "My Garden", "Store", "AI Expert", "Settings"])
     st.markdown("---")
-    st.markdown("<small style='opacity:0.5;'>v2.0.4 Stable</small>", unsafe_allow_html=True)
+    st.markdown("<small style='opacity:0.5;'>v2.0.6 Stable</small>", unsafe_allow_html=True)
 
 # ==========================================
 # 6. PAGE ROUTING
@@ -176,7 +160,6 @@ if menu == "System Overview":
     st.markdown('<p style="color:#4CAF50; font-weight:700; letter-spacing:2px; margin-bottom:0;">SYSTEM ACTIVE</p>', unsafe_allow_html=True)
     st.markdown('# SYSTEM OVERVIEW', unsafe_allow_html=True)
 
-    # The Intelligence Components Section
     st.markdown("### 🧠 GreenFlow Intelligence Hub")
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -198,21 +181,18 @@ if menu == "System Overview":
 elif menu == "My Garden":
     st.markdown("<h1>🌱 My Garden Status</h1>", unsafe_allow_html=True)
     
-    # Existing Plants
     grid_cols = st.columns(3)
     for i, plant in enumerate(st.session_state.user_garden):
         plant_info = PLANTS_DB.get(plant['type'], {})
         days_passed = (datetime.now() - plant['planted_at']).days
         
         with grid_cols[i % 3]:
-            # Added border=True to ensure the CSS border appears
             with st.container(border=True):
                 st.markdown(f"### {plant_info.get('icon')} {plant_info.get('name')}")
                 st.write(f"**Age:** {days_passed} Days")
                 st.progress(min(1.0, days_passed / 60))
                 st.caption(plant_info.get('tips'))
 
-    # Add New Plant Section (Restored)
     st.markdown("---")
     st.markdown("### ➕ Add New Plant")
     with st.container(border=True):
@@ -221,8 +201,8 @@ elif menu == "My Garden":
             with col_a:
                 new_plant_type = st.selectbox("Select Plant Type", list(PLANTS_DB.keys()), format_func=lambda x: PLANTS_DB[x]['name'])
             with col_b:
-                st.write("") # Spacer
-                st.write("") # Spacer
+                st.write("")
+                st.write("")
                 submitted = st.form_submit_button("Plant Seed 🌱")
             
             if submitted:
@@ -240,11 +220,9 @@ elif menu == "Store":
     cols = st.columns(3)
     for idx, (key, pkg) in enumerate(PACKAGES.items()):
         with cols[idx]:
-            # Added border=True to ensure the CSS border appears
             with st.container(border=True):
                 st.header(pkg['name'])
                 st.subheader(f"₹{pkg['price']:,}")
-                # Simple text box as requested (no switching/expanders)
                 st.write(pkg['desc'])
                 st.write(f"**Contains:** {pkg['plants_count']} plants")
                 st.button(f"Purchase Now", key=f"btn_{key}", use_container_width=True)
@@ -252,27 +230,31 @@ elif menu == "Store":
 # --- AI EXPERT ---
 elif menu == "AI Expert":
     st.markdown("<h1>🤖 AI Expert Assistant</h1>", unsafe_allow_html=True)
+    st.markdown("")  # Add spacing after title
     
-    # Display chat history
-    for message in st.session_state.chat_history:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    # FIX: Use a container to properly separate messages from input
+    with st.container():
+        # Display existing chat messages
+        for message in st.session_state.chat_history:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
     
-    # FIX: Use STREAMLIT NATIVE SPACING COMPONENTS (not CSS margins!)
-    st.write("")           # Creates actual vertical space
-    st.divider()          # Creates actual horizontal line
-    st.write("")          # Creates actual vertical space
+    # Add divider with spacing
+    st.divider()
     
-    # Chat Input - placed AFTER spacing
+    # FIX: Chat input placed in its own container for proper spacing
+    st.markdown("")  # Extra spacing
     if prompt := st.chat_input("Ask about your garden or hydroponic system..."):
+        # Add user message
         st.session_state.chat_history.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
         
+        # Get bot response
         time.sleep(0.5)
         response = get_bot_response(prompt)
-        
         st.session_state.chat_history.append({"role": "assistant", "content": response})
+        
         with st.chat_message("assistant"):
             st.markdown(response)
 
@@ -280,20 +262,17 @@ elif menu == "AI Expert":
 elif menu == "Settings":
     st.markdown("<h1>⚙️ Account Settings</h1>", unsafe_allow_html=True)
     
-    # Container with border to separate settings
     with st.container(border=True):
         st.markdown("### 👤 User Profile")
         st.text_input("Display Name", value="Demo User")
         st.text_input("Email Address", value="demo@greenflow.com")
         
         st.markdown("### 🔔 Preferences")
-        # Text visibility is fixed via global CSS
         st.checkbox("Receive weekly plant care tips via email", value=True)
         st.checkbox("Enable SMS alerts for water levels", value=False)
         
     st.markdown("---")
     
-    # Reset Button - with proper styling
     if st.button("Reset Application Data", use_container_width=True):
         st.session_state.clear()
         st.rerun()
