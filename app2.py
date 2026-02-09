@@ -105,7 +105,7 @@ if 'user_garden' not in st.session_state:
         {"type": "lettuce", "planted_at": datetime.now() - timedelta(days=10)},
     ]
 if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = [{"role": "assistant", "content": "Hello! Ask me about your hydroponic setup."}]
+    st.session_state.chat_history = [{"role": "assistant", "content": "Hello! Ask me about your setup."}]
 
 # ==========================================
 # 5. SIDEBAR NAVIGATION
@@ -115,7 +115,7 @@ with st.sidebar:
         <div style="margin-bottom: 20px;">
             <h2 style='color:#4CAF50 !important; margin-bottom: 0;'>🌿 GreenFlow</h2>
             <p style='color: #FFFFFF !important; font-weight: 400; font-size: 0.85rem; opacity: 0.8; margin-top: -5px;'>
-                PREMIUM HYDROPONICS OS
+                PREMIUM OS
             </p>
         </div>
     """, unsafe_allow_html=True)
