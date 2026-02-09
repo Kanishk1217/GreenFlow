@@ -56,21 +56,21 @@ PLANTS_DB = {
 PACKAGES = {
     'starter': {
         'name': 'Starter Kit (Balcony)',
-        'price': 9999,
+        'price': 3999,
         'plants_count': 4,
         'area': '2x2 ft',
         'desc': 'Perfect for beginners. Includes pump, reservoir, and nutrients.'
     },
     'professional': {
         'name': 'Professional Setup',
-        'price': 24999,
+        'price': 4999,
         'plants_count': 12,
         'area': '4x4 ft',
         'desc': 'High-yield system with automated lighting control.'
     },
     'commercial': {
         'name': 'Commercial System',
-        'price': 59999,
+        'price': 5999,
         'plants_count': 30,
         'area': '8x8 ft',
         'desc': 'Full-scale farm setup with IoT monitoring capabilities.'
