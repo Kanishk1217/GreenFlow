@@ -202,7 +202,20 @@ elif menu == "Dashboard":
     # Simple chart
     chart_data = {"Week": [1, 2, 3, 4], "Height (cm)": [5, 12, 18, 25]}
     st.line_chart(chart_data, x="Week", y="Height (cm)")
+# --- MAIN PAGE ROUTING ---
 
+if menu == "Dashboard":
+    # MOVE THESE LINES HERE (Indented)
+    st.markdown('<p style="color:#4CAF50; font-weight:700; letter-spacing:2px; margin-bottom:0;">SYSTEM ONLINE</p>', unsafe_allow_html=True)
+    st.markdown('# GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
+    
+    # Rest of your Dashboard code (Metrics, Charts, etc.)
+    col1, col2, col3, col4 = st.columns(4)
+    # ... code for metrics ...
+
+elif menu == "My Garden":
+    st.markdown("<h1>🌱 My Garden Status</h1>", unsafe_allow_html=True)
+    # The "GreenFlow Intelligence" header will NOT appear here now.
 # --- Page: MY GARDEN ---
 elif menu == "My Garden":
     st.title("🌱 My Garden Status")
