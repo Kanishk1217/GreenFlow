@@ -121,14 +121,40 @@ st.markdown("""
     [data-testid="stSidebar"] { background-color: #000000 !important; }
     [data-testid="stIconMaterial"] { font-family: 'Material Symbols Outlined' !important; } /* Fix Icon */
 
-    /* --- CHAT MESSAGE STYLING --- */
-    /* Ensure chat messages are readable */
+    /* --- CHAT MESSAGE STYLING (FIXED LAYOUT) --- */
+    /* FIX: Ensure chat messages display properly without overlap */
     .stChatMessage {
         font-family: 'Outfit', sans-serif !important;
+        margin-bottom: 16px !important;
+        padding: 12px 0 !important;
     }
     
     .stChatMessage > div > p, .stChatMessage > div > span {
         color: #2D3436 !important;
+        line-height: 1.6 !important;
+        word-wrap: break-word !important;
+    }
+    
+    /* FIX: Chat container spacing to prevent overlap */
+    [data-testid="stChatMessageContainer"] {
+        margin-bottom: 20px !important;
+        padding-bottom: 20px !important;
+    }
+    
+    /* FIX: Chat input field - ensure it's below messages */
+    .stChatInput {
+        position: relative !important;
+        z-index: 1 !important;
+        margin-top: 20px !important;
+        padding-top: 20px !important;
+    }
+    
+    [data-testid="stChatInputContainer"] {
+        position: relative !important;
+        z-index: 1 !important;
+        margin-top: 24px !important;
+        padding-top: 16px !important;
+        border-top: 1px solid #e0e0e0 !important;
     }
 
     /* Padding Fix */
@@ -251,13 +277,20 @@ elif menu == "Store":
 elif menu == "AI Expert":
     st.markdown("<h1>🤖 AI Expert Assistant</h1>", unsafe_allow_html=True)
     
+    # FIX: Add spacing to prevent overlap
+    st.markdown("")  # Empty space
+    
     # Chat History Display
     for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-
-    # Chat Input - FIXED: Corrected placeholder text to prevent overlap
-    if prompt := st.chat_input("Ask your garden questions here..."):
+    
+    # FIX: Add clear separator and spacing before chat input
+    st.markdown("---")
+    st.markdown("")  # Empty space
+    
+    # Chat Input - FIXED: Better layout to prevent overlap
+    if prompt := st.chat_input("Ask about your garden or hydroponic system..."):
         st.session_state.chat_history.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
