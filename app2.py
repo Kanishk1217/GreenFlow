@@ -38,13 +38,13 @@ st.markdown("""
     /* --- MAIN APP AREA --- */
     .stApp { background: #FFFFFF !important; }
     
-    /* Ensure all body text is dark charcoal, NOT white */
-    html, body, [data-testid="stMarkdownContainer"] p, .stCheckbox label, .stMarkdown {
+    /* Force dark text for all UI elements (Fixes Settings invisibility) */
+    html, body, [data-testid="stMarkdownContainer"] p, .stCheckbox label, .stMarkdown, label {
         font-family: 'Outfit', sans-serif !important;
         color: #2D3436 !important;
     }
 
-    /* Professional Bordered Cards */
+    /* Cards with Subtle Border */
     div[data-testid="stVerticalBlock"] > div[style*="border: 1px solid"] {
         background-color: #ffffff !important;
         border: 1px solid #d1d8e0 !important;
@@ -72,11 +72,10 @@ st.markdown("""
     }
     [data-testid="stIconMaterial"] { font-family: 'Material Symbols Outlined' !important; }
 
-    /* Fix Metrics for white background */
+    /* Metric Visuals */
     [data-testid="stMetricValue"] { color: #1B5E20 !important; font-weight: 700 !important; }
     [data-testid="stMetricLabel"] { color: #636e72 !important; }
 
-    /* Layout tweaks */
     .block-container { padding-top: 2rem !important; }
     [data-testid="stHeader"] { background: transparent; }
     </style>
@@ -114,20 +113,22 @@ with st.sidebar:
 # ==========================================
 
 if menu == "Dashboard":
-    # Header specifically for Dashboard / System Overview
-    st.markdown('<p style="color:#4CAF50; font-weight:700; letter-spacing:2px; margin-bottom:0;">SYSTEM ONLINE</p>', unsafe_allow_html=True)
-    st.markdown('# GREENFLOW <span style="font-weight:300">INTELLIGENCE</span>', unsafe_allow_html=True)
+    # Updated Header
+    st.markdown('<p style="color:#4CAF50; font-weight:700; letter-spacing:2px; margin-bottom:0;">SYSTEM ACTIVE</p>', unsafe_allow_html=True)
+    st.markdown('# SYSTEM OVERVIEW', unsafe_allow_html=True)
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1: st.metric("Temperature", "24°C", "1.2°C")
-    with col2: st.metric("Humidity", "65%", "-2%")
-    with col3: st.metric("Water pH", "6.2", "OK")
-    with col4: st.metric("TDS / EC", "850 ppm", "Normal")
+    # Intelligence Components Grid
+    with st.container():
+        col1, col2, col3, col4 = st.columns(4)
+        with col1: st.metric("Temperature", "24°C", "1.2°C")
+        with col2: st.metric("Humidity", "65%", "-2%")
+        with col3: st.metric("Water pH", "6.2", "OK")
+        with col4: st.metric("TDS / EC", "850 ppm", "Normal")
 
-    st.markdown("### 🔔 System Alerts")
+    st.markdown("### 🔔 Live Intelligence Alerts")
     st.warning("Tank water level is at 40%. Consider refilling in 2 days.")
     
-    st.markdown("### 📈 Growth Trends")
+    st.markdown("### 📈 Real-time Growth Metrics")
     st.line_chart({"Week": [1, 2, 3, 4], "Height (cm)": [5, 12, 18, 25]}, x="Week", y="Height (cm)")
 
 elif menu == "My Garden":
@@ -145,10 +146,10 @@ elif menu == "My Garden":
             with st.container(border=True):
                 st.markdown(f"### {plant_info.get('icon')} {plant_info.get('name')}")
                 st.progress(progress)
-                st.write(f"Day {days_passed} of {total_days}")
+                st.write(f"Day **{days_passed}** of {total_days}")
                 if progress >= 1.0: st.success("Ready to Harvest!")
-                with st.expander("Care Tips"):
-                    st.write(f"**pH:** {plant_info.get('ph')}")
+                with st.expander("Care Intelligence"):
+                    st.write(f"**Target pH:** {plant_info.get('ph')}")
                     st.write(plant_info.get('tips'))
 
 elif menu == "Store":
@@ -159,25 +160,27 @@ elif menu == "Store":
             with st.container(border=True):
                 st.header(pkg['name'])
                 st.subheader(f"₹{pkg['price']:,}")
-                st.write(pkg['desc'])
-                st.button(f"Buy {pkg['name']}", key=f"btn_{key}")
+                st.write(f"**Setup Details:** {pkg['desc']}")
+                st.button(f"Purchase {pkg['name']}", key=f"btn_{key}")
 
 elif menu == "AI Expert":
-    st.markdown("<h1>🤖 AI Assistant</h1>", unsafe_allow_html=True)
-    st.info("How can I help you with your plants today?")
+    st.markdown("<h1>🤖 AI Expert Assistant</h1>", unsafe_allow_html=True)
+    st.info("Direct access to GreenFlow's growth intelligence database.")
     # Chat logic here...
 
 elif menu == "Settings":
     st.markdown("<h1>⚙️ Account Settings</h1>", unsafe_allow_html=True)
     
-    # These containers ensure text is dark on the white background
+    # Bordered container ensures dark text contrast on white background
     with st.container(border=True):
-        st.write("### User Profile")
-        st.write("**Account Name:** Demo User")
-        st.write("**Email:** demo@greenflow.com")
+        st.write("### User Profile & Preferences")
+        st.write("**Account Holder:** Demo User")
+        st.write("**Registered Email:** demo@greenflow.com")
+        
+        st.markdown("---")
         st.checkbox("Receive weekly plant care tips via email", value=True)
         st.checkbox("Enable SMS alerts for water levels", value=False)
         
-    if st.button("Clear App Data"):
+    if st.button("Reset Application Data"):
         st.session_state.clear()
         st.rerun()
