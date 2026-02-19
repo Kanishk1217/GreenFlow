@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Haryali — Clean Energy Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#083d2e;--g2:#0f5c44;--g3:#17885f;--g4:#22c55e;--g5:#4ade80;--g6:#bbf7d0;
+  --bg:#f0faf5;--bg2:#e3f5ec;--bg3:#d4edd9;
+  --white:#ffffff;--border:#c6e4d2;--border2:#a8d4bc;
+  --txt:#081f17;--txt2:#1e5c3c;--txt3:#5a9070;--txt4:#8fbfa4;
+  --sh:0 1px 14px rgba(8,61,46,.07);--shh:0 8px 40px rgba(8,61,46,.14);--shx:0 20px 60px rgba(8,61,46,.18);
+  --r:14px;--rs:8px;
+  --sb-w:260px;--sb-w-col:68px;
+  --nav-h:62px;
+  --trans:.28s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--txt);overflow-x:hidden}
+
+/* ══════════ TOPNAV (home only) ══════════ */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:400;height:var(--nav-h);
+  padding:0 40px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(198,228,210,.5);transition:box-shadow var(--trans);
+}
+.topnav.shad{box-shadow:0 2px 24px rgba(8,61,46,.08)}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;user-select:none}
+.brand-mark{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--g2),var(--g4));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(34,197,94,.3);
+}
+.brand-name{font-size:1.05rem;font-weight:800;color:var(--g1);letter-spacing:-.4px}
+.tnav-links{display:flex;align-items:center;gap:1px}
+.tnl{
+  padding:8px 16px;border-radius:8px;font-size:.875rem;font-weight:500;
+  color:var(--txt2);cursor:pointer;border:none;background:none;
+  transition:all .18s;font-family:'DM Sans',sans-serif;letter-spacing:-.1px;
+}
+.tnl:hover{background:var(--bg);color:var(--g1);font-weight:600}
+.tnl.act{background:var(--bg2);color:var(--g1);font-weight:700}
+
+/* Premium button styles */
+.btn-prime{
+  padding:10px 24px;border-radius:10px;font-size:.9rem;font-weight:700;
+  background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 45%,var(--g3) 100%);
+  color:#fff;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  letter-spacing:-.1px;transition:transform .22s,box-shadow .22s;
+  box-shadow:0 3px 14px rgba(34,197,94,.3),inset 0 1px 0 rgba(255,255,255,.15);
+  display:inline-flex;align-items:center;gap:7px;
+  animation:glowPulse 3s ease-in-out infinite;
+}
+.btn-prime:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(34,197,94,.48),inset 0 1px 0 rgba(255,255,255,.2);animation:none}
+.btn-prime:active{transform:translateY(0);box-shadow:0 2px 10px rgba(34,197,94,.25);animation:none}
+
+.btn-ghost{
+  padding:10px 24px;border-radius:10px;font-size:.9rem;font-weight:600;
+  background:rgba(255,255,255,.85);color:var(--g1);border:1.5px solid var(--border2);
+  cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-.1px;
+  transition:all .2s;display:inline-flex;align-items:center;gap:7px;
+  backdrop-filter:blur(8px);
+}
+.btn-ghost:hover{background:#fff;border-color:var(--g4);transform:translateY(-2px);box-shadow:0 4px 16px rgba(8,61,46,.1)}
+.btn-ghost:active{transform:translateY(0)}
+
+.btn-sm{
+  padding:8px 18px;border-radius:9px;font-size:.82rem;font-weight:700;
+  background:linear-gradient(135deg,var(--g2),var(--g4));color:#fff;
+  border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-.1px;
+  transition:transform .2s,box-shadow .2s;box-shadow:0 2px 10px rgba(34,197,94,.25);
+  display:inline-flex;align-items:center;gap:6px;
+}
+.btn-sm:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(34,197,94,.42)}
+.btn-sm:active{transform:translateY(0)}
+
+.btn-sm-o{
+  padding:8px 18px;border-radius:9px;font-size:.82rem;font-weight:600;
+  background:var(--white);color:var(--g2);border:1.5px solid var(--border);
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;
+}
+.btn-sm-o:hover{border-color:var(--g4);color:var(--g2);background:var(--bg);transform:translateY(-1px)}
+
+/* ══════════ PAGE SYSTEM ══════════ */
+.page{display:none}
+.page.active{display:block;animation:pageIn .3s ease both}
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+
+/* ══════════════════════════════════════
+   HOME PAGE
+══════════════════════════════════════ */
+.home{padding-top:var(--nav-h)}
+
+/* HERO */
+.hero{
+  min-height:calc(100vh - var(--nav-h));
+  background:#f8fefb;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;padding:60px 24px 80px;text-align:center;
+}
+/* Rich mesh gradient background */
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% -10%, rgba(34,197,94,.13) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at -10% 80%, rgba(23,136,95,.1) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 85% 85%, rgba(74,222,128,.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 15% 20%, rgba(187,247,208,.15) 0%, transparent 55%),
+    linear-gradient(170deg,#f0fdf7 0%,#eafaf3 40%,#f5fffe 70%,#fafffe 100%);
+  pointer-events:none;
+}
+/* Noise texture overlay for depth */
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+  pointer-events:none;opacity:.4;
+}
+/* Floating light orbs — softer and more refined */
+.orb{position:absolute;border-radius:50%;pointer-events:none;will-change:transform}
+.orb1{
+  width:640px;height:640px;
+  background:radial-gradient(circle at 40% 40%,rgba(34,197,94,.09),transparent 65%);
+  top:-180px;right:-160px;filter:blur(40px);
+  animation:orbA 16s ease-in-out infinite;
+}
+.orb2{
+  width:480px;height:480px;
+  background:radial-gradient(circle at 60% 60%,rgba(15,92,68,.07),transparent 65%);
+  bottom:-120px;left:-120px;filter:blur(50px);
+  animation:orbA 12s ease-in-out infinite reverse 1s;
+}
+.orb3{
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(74,222,128,.07),transparent 70%);
+  top:35%;left:5%;filter:blur(30px);
+  animation:orbA 9s ease-in-out infinite 3s;
+}
+.orb4{
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(34,197,94,.06),transparent 70%);
+  top:20%;right:12%;filter:blur(25px);
+  animation:orbA 11s ease-in-out infinite reverse 5s;
+}
+@keyframes orbA{
+  0%,100%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(18px,-22px) scale(1.04)}
+  50%{transform:translate(-14px,16px) scale(.97)}
+  75%{transform:translate(10px,8px) scale(1.02)}
+}
+/* Elegant floating dots — smaller, subtler */
+.hero-dots{position:absolute;inset:0;pointer-events:none;z-index:1}
+.hdot{
+  position:absolute;border-radius:50%;
+  background:rgba(34,197,94,.22);
+  animation:hdotF ease-in-out infinite;
+  will-change:transform,opacity;
+}
+@keyframes hdotF{0%,100%{transform:translateY(0) scale(1);opacity:.2}50%{transform:translateY(-12px) scale(1.15);opacity:.55}}
+/* Decorative grid lines — very subtle */
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 20%,transparent 100%);
+}
+/* Watermark SVG shapes */
+.wm-tl{position:absolute;top:-50px;left:-50px;opacity:.055;pointer-events:none;animation:wmDrift 28s ease-in-out infinite}
+.wm-tr{position:absolute;top:6%;right:4%;opacity:.06;pointer-events:none;animation:wmDrift 20s ease-in-out infinite reverse 4s}
+@keyframes wmDrift{0%,100%{transform:rotate(0deg) scale(1)}33%{transform:rotate(6deg) scale(1.04)}66%{transform:rotate(-4deg) scale(.97)}}
+
+.hero-inner{position:relative;z-index:2;max-width:720px}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.9);border:1px solid rgba(34,197,94,.2);
+  backdrop-filter:blur(16px);padding:6px 16px 6px 10px;border-radius:40px;
+  font-size:.76rem;font-weight:600;color:var(--txt2);margin-bottom:30px;
+  box-shadow:0 1px 20px rgba(8,61,46,.06),0 0 0 1px rgba(255,255,255,.8) inset;
+  opacity:0;animation:fadeUp .65s .06s ease forwards;
+}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:var(--g4);
+  box-shadow:0 0 0 3px rgba(34,197,94,.2);
+  animation:pulseDot 2.4s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{transform:scale(1);box-shadow:0 0 0 3px rgba(34,197,94,.2)}50%{transform:scale(1.3);box-shadow:0 0 0 5px rgba(34,197,94,.08)}}
+.hero-h1{
+  font-size:clamp(4.4rem,9.5vw,7.2rem);font-weight:900;
+  background:linear-gradient(140deg,var(--g1) 0%,var(--g2) 35%,var(--g3) 65%,#16a34a 85%,var(--g4) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:-6px;line-height:.92;margin-bottom:20px;
+  opacity:0;animation:fadeUp .75s .14s ease forwards;
+}
+.hero-rule{
+  width:80px;height:3px;border-radius:3px;margin:0 auto 24px;
+  background:linear-gradient(90deg,var(--g2),var(--g4),var(--g5));
+  opacity:0;animation:scaleIn .8s .26s ease forwards;
+  box-shadow:0 2px 8px rgba(34,197,94,.3);
+}
+@keyframes scaleIn{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}
+.hero-sub{
+  font-size:1rem;color:var(--txt2);line-height:1.72;
+  max-width:540px;margin:0 auto 40px;font-weight:400;letter-spacing:.01em;
+  opacity:0;animation:fadeUp .75s .34s ease forwards;
+}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .75s .44s ease forwards}
+
+/* Button shimmer sweep animation */
+.btn-prime{position:relative;overflow:hidden}
+.btn-prime::before{
+  content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.28),transparent);
+  transition:left .5s ease;pointer-events:none;border-radius:inherit;
+}
+.btn-prime:hover::before{left:160%}
+/* Subtle glow pulse on primary buttons */
+@keyframes glowPulse{0%,100%{box-shadow:0 3px 14px rgba(34,197,94,.28),inset 0 1px 0 rgba(255,255,255,.15)}50%{box-shadow:0 5px 24px rgba(34,197,94,.48),inset 0 1px 0 rgba(255,255,255,.22)}}
+
+/* Page entrance */
+@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SECTIONS (home page only) ── */
+.section{padding:88px 40px;max-width:1080px;margin:0 auto}
+.section-bg{background:var(--bg)}
+.sec-lbl{font-size:.7rem;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;display:block}
+.sec-h{font-size:clamp(1.75rem,3.5vw,2.4rem);font-weight:800;color:var(--g1);line-height:1.12;margin-bottom:12px;letter-spacing:-.6px}
+.sec-p{font-size:.93rem;color:var(--txt2);line-height:1.68;max-width:500px}
+.sec-ctr{text-align:center}.sec-ctr .sec-p{margin:0 auto}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.stat-c{
+  background:var(--white);border:1px solid var(--border);border-radius:20px;
+  padding:36px 28px;text-align:center;
+  box-shadow:0 1px 20px rgba(8,61,46,.06);
+  transition:all .32s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;overflow:hidden;
+}
+.stat-c::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,var(--bg2),transparent 60%);
+  opacity:0;transition:opacity .32s;
+}
+.stat-c:hover::before{opacity:1}
+.stat-c:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(8,61,46,.12);border-color:var(--border2)}
+.stat-ico{display:flex;justify-content:center;margin-bottom:16px;color:var(--g3)}
+.stat-n{font-size:2.8rem;font-weight:900;color:var(--g1);letter-spacing:-3px;line-height:1;margin-bottom:7px}
+.stat-l{font-size:.82rem;color:var(--txt3);font-weight:500}
+
+/* How it works */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.steps::after{content:'';position:absolute;top:24px;left:12%;right:12%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--g4) 20%,var(--g3) 80%,transparent);
+  opacity:.18;z-index:0}
+.step{padding:0 20px;text-align:center;z-index:1}
+.step-n{
+  width:48px;height:48px;border-radius:50%;margin:0 auto 16px;
+  background:linear-gradient(135deg,var(--g2),var(--g4));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:800;color:#fff;
+  box-shadow:0 4px 16px rgba(34,197,94,.32);
+  transition:transform .25s,box-shadow .25s;
+}
+.step:hover .step-n{transform:translateY(-3px) scale(1.08);box-shadow:0 8px 24px rgba(34,197,94,.42)}
+.step h3{font-size:.9rem;font-weight:700;color:var(--g1);margin-bottom:7px}
+.step p{font-size:.79rem;color:var(--txt2);line-height:1.55}
+
+/* Contact */
+.contact-form{
+  background:var(--white);border:1px solid var(--border);border-radius:20px;
+  padding:40px;box-shadow:var(--sh);max-width:560px;margin:0 auto;
+}
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:.76rem;font-weight:600;color:var(--txt2);margin-bottom:5px}
+.fg input,.fg textarea,.fg select{
+  width:100%;background:var(--bg);border:1.5px solid var(--border);
+  color:var(--txt);border-radius:8px;padding:9px 13px;
+  font-size:.875rem;font-family:'DM Sans',sans-serif;outline:none;
+  transition:border .2s,box-shadow .2s;
+}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--g4);box-shadow:0 0 0 3px rgba(34,197,94,.08)}
+.fg textarea{resize:vertical;min-height:100px}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Footer */
+.footer{background:var(--g1);color:rgba(255,255,255,.75);padding:52px 40px 28px}
+.foot-in{max-width:1060px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px}
+.foot-brand h3{font-size:1rem;font-weight:800;color:#fff;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.foot-brand p{font-size:.8rem;line-height:1.6}
+.foot-col h4{font-size:.68rem;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+.foot-col a{display:block;font-size:.8rem;color:rgba(255,255,255,.55);margin-bottom:7px;cursor:pointer;transition:color .18s;text-decoration:none}
+.foot-col a:hover{color:var(--g5)}
+.foot-bot{border-top:1px solid rgba(255,255,255,.08);padding-top:22px;text-align:center;font-size:.72rem;opacity:.38}
+
+/* ══════════════════════════════════════
+   INNER APP LAYOUT (sidebar + content)
+══════════════════════════════════════ */
+.app-shell{
+  display:flex;padding-top:var(--nav-h);min-height:100vh;
+  background:var(--bg);
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;top:var(--nav-h);left:0;bottom:0;
+  width:var(--sb-w);z-index:200;
+  background:var(--white);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transition:width var(--trans),box-shadow var(--trans);
+  overflow:hidden;
+}
+.sidebar.collapsed{width:var(--sb-w-col)}
+.sidebar.collapsed .sb-label,
+.sidebar.collapsed .sb-group-lbl,
+.sidebar.collapsed .sb-badge{opacity:0;pointer-events:none;width:0;overflow:hidden;margin:0}
+.sidebar.collapsed .sb-item{justify-content:center;padding:12px 0}
+.sidebar.collapsed .sb-item .sb-ico{margin:0}
+.sidebar.collapsed .sb-toggle-btn{justify-content:center}
+.sidebar.collapsed .sb-brand-txt{opacity:0;pointer-events:none;width:0;overflow:hidden}
+
+/* Sidebar header */
+.sb-header{
+  height:56px;display:flex;align-items:center;
+  padding:0 16px;border-bottom:1px solid var(--border);
+  gap:10px;flex-shrink:0;
+}
+.sb-brand-ico{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--g2),var(--g4));display:flex;align-items:center;justify-content:center}
+.sb-brand-txt{font-size:.95rem;font-weight:800;color:var(--g1);letter-spacing:-.3px;white-space:nowrap;transition:opacity var(--trans),width var(--trans)}
+
+/* Toggle button */
+.sb-toggle-btn{
+  margin-left:auto;flex-shrink:0;
+  width:28px;height:28px;border-radius:7px;
+  background:var(--bg);border:1px solid var(--border);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;color:var(--txt2);
+}
+.sidebar.collapsed .sb-toggle-btn{margin:0}
+.sb-toggle-btn:hover{background:var(--bg2);border-color:var(--g4);color:var(--g2)}
+
+/* Sidebar nav */
+.sb-nav{flex:1;padding:10px 10px;overflow-y:auto;overflow-x:hidden}
+.sb-nav::-webkit-scrollbar{width:3px}
+.sb-nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.sb-group-lbl{
+  font-size:.64rem;font-weight:700;color:var(--txt4);
+  text-transform:uppercase;letter-spacing:1.5px;
+  padding:14px 8px 5px;white-space:nowrap;
+  transition:opacity var(--trans),width var(--trans);
+}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;cursor:pointer;
+  font-size:.875rem;font-weight:500;color:var(--txt2);
+  transition:all .18s;margin-bottom:2px;border:none;
+  background:none;width:100%;text-align:left;
+  font-family:'DM Sans',sans-serif;white-space:nowrap;
+  position:relative;overflow:hidden;
+}
+.sb-item::before{
+  content:'';position:absolute;inset:0;border-radius:10px;
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  opacity:0;transition:opacity .18s;
+}
+.sb-item:hover::before{opacity:1}
+.sb-item:hover{color:var(--g1)}
+.sb-item.active{background:linear-gradient(135deg,var(--bg2),var(--bg3));color:var(--g1);font-weight:700;box-shadow:inset 2px 0 0 var(--g4)}
+.sb-item.active::before{opacity:0}
+.sb-ico{
+  width:34px;height:34px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;position:relative;z-index:1;
+  transition:all .18s;
+}
+.sb-item:hover .sb-ico,.sb-item.active .sb-ico{background:var(--white);box-shadow:0 1px 8px rgba(8,61,46,.1)}
+.sb-label{font-weight:inherit;position:relative;z-index:1;transition:opacity var(--trans),width var(--trans);white-space:nowrap}
+.sb-badge{
+  margin-left:auto;background:var(--g4);color:#fff;
+  font-size:.6rem;padding:2px 7px;border-radius:20px;font-weight:700;
+  flex-shrink:0;position:relative;z-index:1;white-space:nowrap;
+  transition:opacity var(--trans),width var(--trans);
+}
+
+/* Sidebar footer */
+.sb-footer{border-top:1px solid var(--border);padding:12px 10px;flex-shrink:0}
+.sb-footer-txt{font-size:.68rem;color:var(--txt4);padding:6px 8px;white-space:nowrap;transition:opacity var(--trans)}
+.sidebar.collapsed .sb-footer-txt{opacity:0}
+
+/* ── SIDEBAR FEATURE CARDS ── */
+.sb-feat-card{
+  margin:4px 0 8px;display:flex;flex-direction:column;gap:3px;
+  transition:opacity var(--trans);
+}
+.sidebar.collapsed .sb-feat-card{opacity:0;pointer-events:none;height:0;overflow:hidden;margin:0}
+.sb-feat-item{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;
+  background:var(--bg);border:1px solid var(--border);
+  transition:all .2s;cursor:default;
+}
+.sb-feat-item:hover{background:var(--bg2);border-color:var(--border2);transform:translateX(2px)}
+.sb-feat-ico{
+  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.sb-feat-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.sb-feat-name{font-size:.76rem;font-weight:700;color:var(--g1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-feat-sub{font-size:.62rem;color:var(--txt4);white-space:nowrap}
+
+/* ── APP CONTENT ── */
+.app-content{
+  flex:1;margin-left:var(--sb-w);
+  transition:margin-left var(--trans);
+  min-height:100vh;
+  display:flex;flex-direction:column;
+}
+.app-content.expanded{margin-left:var(--sb-w-col)}
+
+/* Inner topbar */
+.ibar{
+  height:52px;background:var(--white);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;flex-shrink:0;position:sticky;top:var(--nav-h);z-index:100;
+}
+.ibar-left{display:flex;align-items:center;gap:12px}
+.mob-sb-btn{
+  display:none;background:var(--bg);border:1.5px solid var(--border);
+  width:34px;height:34px;border-radius:8px;cursor:pointer;
+  align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;
+}
+.mob-sb-btn:hover{background:var(--bg2);border-color:var(--g4)}
+@media(max-width:700px){.mob-sb-btn{display:flex}}
+.ibar h2{font-size:.95rem;font-weight:700;color:var(--g1);letter-spacing:-.2px}
+.badge-live{display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:.7rem;font-weight:600;color:var(--txt2)}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--g4);animation:ldotP 2s infinite;display:inline-block}
+@keyframes ldotP{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.5)}}
+
+.ibody{padding:24px 28px;flex:1}
+
+/* ── DASHBOARD CARDS ── */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dc{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r);
+  padding:20px;box-shadow:var(--sh);transition:all .22s;
+}
+.dc:hover{box-shadow:0 4px 20px rgba(8,61,46,.1);border-color:var(--border2)}
+.dl{font-size:.66rem;font-weight:700;color:var(--txt4);text-transform:uppercase;letter-spacing:.9px;margin-bottom:5px}
+.dv{font-size:1.75rem;font-weight:800;color:var(--g1);letter-spacing:-.6px}
+.ds{font-size:.73rem;color:var(--g4);font-weight:600;margin-top:3px}
+.dc h3{font-size:.88rem;font-weight:700;color:var(--g1);margin-bottom:14px;letter-spacing:-.2px}
+
+/* Flow bars */
+.br{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bl{width:86px;font-size:.74rem;color:var(--txt2);font-weight:500;flex-shrink:0}
+.btr{flex:1;height:6px;background:var(--bg2);border-radius:6px;overflow:hidden}
+.bfi{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--g2),var(--g4));transition:width 1s ease}
+.bpc{font-size:.7rem;color:var(--txt4);width:28px;text-align:right;font-weight:600}
+
+/* ── GARDEN ── */
+.g-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.gtag{
+  padding:6px 14px;border-radius:20px;font-size:.76rem;font-weight:600;
+  cursor:pointer;border:1.5px solid var(--border);color:var(--txt2);
+  background:var(--white);transition:all .18s;font-family:'DM Sans',sans-serif;
+}
+.gtag:hover,.gtag.on{background:var(--bg2);border-color:var(--g4);color:var(--g1)}
+
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:9px;margin-bottom:20px}
+.ccard{
+  background:var(--white);border:1.5px solid var(--border);border-radius:12px;
+  padding:13px 9px;text-align:center;cursor:pointer;
+  transition:all .22s;
+}
+.ccard:hover{border-color:var(--g4);transform:translateY(-2px);box-shadow:0 4px 16px rgba(8,61,46,.1)}
+.ce{font-size:1.8rem;margin-bottom:5px;line-height:1}
+.cn{font-size:.7rem;font-weight:600;color:var(--g1)}
+.ct{font-size:.6rem;color:var(--txt4);margin-top:2px}
+
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.gp{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:15px;position:relative;transition:all .22s}
+.gp:hover{border-color:rgba(34,197,94,.35);box-shadow:var(--sh)}
+.gpt{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.gpe{font-size:1.6rem;line-height:1}
+.gpi h4{font-size:.82rem;font-weight:700;color:var(--g1)}
+.gpi p{font-size:.66rem;color:var(--txt4)}
+.gpbar{height:4px;background:var(--bg2);border-radius:4px;margin:7px 0;overflow:hidden}
+.gpfi{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--g2),var(--g4));transition:width .6s ease}
+.gpb{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:600}
+.bs{background:#fef3c7;color:#92400e}.bp{background:#dcfce7;color:#166534}.bg{background:#d1fae5;color:#065f46}.bh{background:#ffedd5;color:#9a3412}
+.gpw{font-size:.68rem;color:var(--g2);font-weight:600;margin-top:6px}
+.gprm{position:absolute;top:9px;right:9px;background:none;border:none;color:var(--txt4);cursor:pointer;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .18s;font-size:.75rem}
+.gprm:hover{background:#fee2e2;color:#dc2626}
+.gpadv{width:100%;margin-top:8px;padding:6px;border-radius:8px;font-size:.73rem;font-weight:600;background:var(--bg);color:var(--g1);border:1.5px solid var(--border);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s}
+.gpadv:hover{background:var(--bg2);border-color:var(--g4)}
+.empty-s{text-align:center;padding:44px 20px;color:var(--txt4)}
+.empty-s .ei{font-size:2.5rem;margin-bottom:10px}
+.empty-s h4{font-size:.9rem;font-weight:600;color:var(--txt2);margin-bottom:4px}
+.empty-s p{font-size:.78rem}
+
+/* ── STORE ── */
+.store-hero{
+  background:linear-gradient(135deg,#eafaf2,#d4edd9);border:1px solid var(--border);
+  border-radius:18px;padding:36px 28px;text-align:center;margin-bottom:22px;
+}
+.store-hero h2{font-size:1.7rem;font-weight:800;color:var(--g1);margin-bottom:7px;letter-spacing:-.6px}
+.store-hero p{font-size:.875rem;color:var(--txt2);max-width:440px;margin:0 auto}
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pkg{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:24px 20px;display:flex;flex-direction:column;position:relative;transition:all .25s}
+.pkg:hover{transform:translateY(-3px);box-shadow:var(--shh)}
+.pkg.best{border-color:var(--g4);box-shadow:0 0 0 2px rgba(34,197,94,.1)}
+.ptag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--g2),var(--g4));color:#fff;padding:3px 14px;border-radius:20px;font-size:.66rem;font-weight:800;white-space:nowrap}
+.pname{font-size:.67rem;font-weight:700;color:var(--txt4);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}
+.pprice{font-size:1.8rem;font-weight:800;color:var(--g1);letter-spacing:-.6px}
+.pprice span{font-size:.8rem;font-weight:400;color:var(--txt4)}
+.pdesc{font-size:.79rem;color:var(--txt2);margin:7px 0 13px;line-height:1.5}
+.pcnt{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px;text-align:center;margin-bottom:16px}
+.pcnt .pn{font-size:1.9rem;font-weight:800;color:var(--g1);letter-spacing:-.5px}
+.pcnt p{font-size:.67rem;color:var(--txt4);font-weight:500;margin-top:2px}
+.plist{list-style:none;margin-bottom:18px;flex:1}
+.plist li{font-size:.78rem;color:var(--txt2);padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.plist li:last-child{border:none}
+.plist li::before{content:"✓";color:var(--g4);font-weight:800;flex-shrink:0}
+.pbtn{width:100%;padding:11px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s;letter-spacing:-.1px;position:relative;overflow:hidden}
+.pbtn-o{background:var(--white);color:var(--g2);border:1.5px solid var(--border)}
+.pbtn-o:hover{border-color:var(--g4);background:var(--bg);transform:translateY(-1px)}
+.pbtn-g{background:linear-gradient(135deg,var(--g2),var(--g4));color:#fff;box-shadow:0 3px 12px rgba(34,197,94,.28)}
+.pbtn-g::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);pointer-events:none}
+.pbtn-g:hover{box-shadow:0 5px 18px rgba(34,197,94,.42);transform:translateY(-2px)}
+
+/* ── CHATBOT ── */
+.chat-wrap{display:flex;gap:14px;height:calc(100vh - 178px)}
+.chat-side{width:195px;flex-shrink:0}
+.chat-main{flex:1;display:flex;flex-direction:column}
+.ctopic{width:100%;text-align:left;padding:8px 11px;border-radius:8px;background:var(--white);border:1.5px solid var(--border);color:var(--txt2);cursor:pointer;font-size:.76rem;font-family:'DM Sans',sans-serif;margin-bottom:5px;transition:all .18s;font-weight:500}
+.ctopic:hover{border-color:var(--g4);color:var(--g1);background:var(--bg)}
+.msgs{flex:1;overflow-y:auto;padding:15px;background:var(--white);border:1.5px solid var(--border);border-radius:12px 12px 0 0;display:flex;flex-direction:column;gap:12px}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.msg{display:flex;gap:8px;max-width:78%}
+.msg.u{align-self:flex-end;flex-direction:row-reverse}
+.mav{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;font-weight:700}
+.mav.ai{background:linear-gradient(135deg,var(--g2),var(--g4));color:#fff}
+.mav.u{background:var(--bg2);border:1.5px solid var(--border);color:var(--g2);font-size:.8rem}
+.mbub{padding:10px 14px;border-radius:11px;font-size:.82rem;line-height:1.5;color:var(--txt)}
+.msg.ai .mbub{background:var(--bg);border:1px solid var(--border);border-radius:3px 11px 11px 11px}
+.msg.u .mbub{background:var(--bg2);border:1px solid rgba(34,197,94,.18);border-radius:11px 3px 11px 11px}
+.mtime{font-size:.59rem;color:var(--txt4);margin-top:2px}
+.typing{display:flex;gap:3px;padding:2px 0}
+.typing span{width:5px;height:5px;border-radius:50%;background:var(--g4);animation:tb 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.cinp{display:flex;gap:8px;padding:10px;background:var(--white);border:1.5px solid var(--border);border-top:none;border-radius:0 0 12px 12px}
+.cinp input{flex:1;background:var(--bg);border:1.5px solid var(--border);color:var(--txt);border-radius:8px;padding:8px 12px;font-size:.83rem;font-family:'DM Sans',sans-serif;outline:none;transition:all .18s}
+.cinp input:focus{border-color:var(--g4);box-shadow:0 0 0 3px rgba(34,197,94,.08)}
+
+/* ── MODALS ── */
+.mover{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px);animation:mfade .2s ease}
+@keyframes mfade{from{opacity:0}to{opacity:1}}
+.modal{background:var(--white);border:1px solid var(--border);border-radius:18px;width:100%;max-width:450px;padding:26px;position:relative;box-shadow:var(--shx);animation:mslide .25s ease}
+@keyframes mslide{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal h3{font-size:.95rem;font-weight:800;color:var(--g1);margin-bottom:15px;letter-spacing:-.2px}
+.mcls{position:absolute;top:12px;right:12px;background:var(--bg);border:none;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:.8rem;color:var(--g1);display:flex;align-items:center;justify-content:center;transition:all .18s}
+.mcls:hover{background:var(--bg2)}
+
+/* Payment modal */
+.pnote{background:#fefce8;border:1px solid #fde68a;border-radius:7px;padding:8px 12px;font-size:.72rem;color:#92400e;margin-bottom:11px}
+.ord{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px;margin-bottom:12px}
+.ord h4{font-size:.66rem;font-weight:700;color:var(--txt4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.orow{display:flex;justify-content:space-between;font-size:.78rem;color:var(--txt2);padding:2px 0}
+.otot{font-weight:700;color:var(--g1);font-size:.86rem;border-top:1px solid var(--border);margin-top:6px;padding-top:6px}
+.succ{text-align:center;padding:10px 0}
+.succ .si{font-size:2.4rem;margin-bottom:9px}
+.succ h3{color:var(--g1);margin-bottom:6px}
+.succ p{font-size:.78rem;color:var(--txt2);line-height:1.5}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* ══════════ NEW STORE ══════════ */
+.store-new-body{padding:0!important}
+.snhero{background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 50%,var(--g3) 100%);padding:36px 32px;position:relative;overflow:hidden}
+.snhero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 100% 0%,rgba(74,222,128,.15),transparent 60%);pointer-events:none}
+.snhero-inner{position:relative;z-index:1}
+.snhero .sec-lbl{color:var(--g5);margin-bottom:8px}
+.snhero h2{font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.15;margin-bottom:10px}
+.snhero p{font-size:.85rem;color:rgba(255,255,255,.72);line-height:1.6;max-width:480px}
+
+.store-layout{display:grid;grid-template-columns:1fr 320px;gap:0;align-items:start}
+.store-builder{padding:24px;display:flex;flex-direction:column;gap:16px}
+
+/* Service block */
+.svc-block{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:box-shadow .25s,border-color .25s}
+.svc-block:hover{box-shadow:var(--sh);border-color:var(--border2)}
+.svc-header{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--bg);border-bottom:1px solid var(--border)}
+.svc-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--g2),var(--g4));color:#fff;font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.svc-title{font-size:.92rem;font-weight:700;color:var(--g1);letter-spacing:-.2px}
+.svc-sub{font-size:.72rem;color:var(--txt3);margin-top:1px}
+.svc-header > label{margin-left:auto;flex-shrink:0}
+.svc-body{padding:16px 18px;font-size:.82rem;color:var(--txt2);line-height:1.6}
+.svc-body p{margin-bottom:10px}
+.svc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.svc-tags span{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:.7rem;font-weight:600;color:var(--txt2)}
+
+/* Toggle switch */
+.svc-toggle{position:relative;display:inline-block;width:40px;height:22px;cursor:pointer}
+.svc-toggle input{display:none}
+.tog-track{position:absolute;inset:0;background:var(--bg3);border-radius:11px;transition:background .25s}
+.tog-thumb{position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .25s;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.svc-toggle input:checked ~ .tog-track{background:var(--g4)}
+.svc-toggle input:checked ~ .tog-track .tog-thumb{left:21px}
+
+/* Tier cards */
+.tier-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.tier-card{border:2px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .22s;position:relative;background:var(--white)}
+.tier-card:hover{border-color:var(--g4);transform:translateY(-2px);box-shadow:0 4px 16px rgba(34,197,94,.15)}
+.tier-card.selected{border-color:var(--g2);background:linear-gradient(135deg,rgba(8,61,46,.04),rgba(34,197,94,.06));box-shadow:0 4px 20px rgba(8,61,46,.12)}
+.tier-card.popular{border-color:var(--g3)}
+.tier-pop-tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--g2),var(--g4));color:#fff;font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:0 0 6px 6px;white-space:nowrap}
+.tier-badge{font-size:.68rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.tier-plants{font-size:1.4rem;font-weight:900;color:var(--g1);letter-spacing:-1px;line-height:1}
+.tier-plants span{font-size:.65rem;font-weight:500;color:var(--txt3)}
+.tier-price{font-size:.82rem;font-weight:700;color:var(--g3);margin-top:4px}
+.tier-best{font-size:.64rem;color:var(--txt4);margin-top:3px;line-height:1.3}
+.tier-check{position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--g4);color:#fff;font-size:.62rem;display:none;align-items:center;justify-content:center;font-weight:700}
+.tier-card.selected .tier-check{display:flex}
+
+/* Cost breakdown */
+.breakdown-wrap{border-top:1px solid var(--border);margin-top:12px;padding-top:10px}
+.breakdown-tog{background:none;border:none;cursor:pointer;font-size:.76rem;font-weight:600;color:var(--g3);display:flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;padding:0;transition:color .18s}
+.breakdown-tog:hover{color:var(--g2)}
+.breakdown-tog svg{transition:transform .22s}
+.breakdown-tog.open svg{transform:rotate(90deg)}
+.breakdown-body{margin-top:10px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;animation:fadeDown .2s ease}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.breakdown-body .br-row{display:flex;justify-content:space-between;font-size:.74rem;color:var(--txt2);padding:3px 0;border-bottom:1px solid rgba(198,228,210,.4)}
+.breakdown-body .br-row:last-of-type{border:none;font-weight:700;color:var(--g1);margin-top:4px;font-size:.78rem}
+.breakdown-note{font-size:.65rem;color:var(--txt4);margin-top:8px;line-height:1.4}
+
+/* Install breakdown */
+.install-breakdown{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 12px;margin-top:8px}
+.ib-row{display:flex;justify-content:space-between;font-size:.75rem;color:var(--txt2);padding:3px 0}
+
+/* Sub cards */
+.sub-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sub-card{border:2px solid var(--border);border-radius:12px;padding:16px 14px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.sub-card:hover{border-color:var(--g4);transform:translateY(-2px)}
+.sub-card.selected{border-color:var(--g2);background:linear-gradient(135deg,rgba(8,61,46,.04),rgba(34,197,94,.07))}
+.sub-save-ribbon{position:absolute;top:10px;right:-14px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:.6rem;font-weight:800;padding:3px 20px;transform:rotate(25deg);letter-spacing:.3px}
+.sub-price{font-size:1.3rem;font-weight:900;color:var(--g1);letter-spacing:-1px}
+.sub-price span{font-size:.72rem;font-weight:500;color:var(--txt3)}
+.sub-label{font-size:.8rem;font-weight:700;color:var(--txt2);margin-top:4px}
+.sub-detail{font-size:.68rem;color:var(--txt4);margin-top:2px}
+
+/* Plant selector */
+.plant-cap-info{font-size:.74rem;color:var(--txt3);margin-bottom:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 12px}
+.plant-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.plant-type{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}
+.pt-label{font-size:.74rem;font-weight:600;color:var(--txt2);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.pt-price{font-size:.66rem;color:var(--g3);font-weight:700}
+.pt-stepper{display:flex;align-items:center;gap:10px;justify-content:center}
+.step-btn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border2);background:var(--white);color:var(--g2);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;transition:all .18s;line-height:1}
+.step-btn:hover{background:var(--g4);border-color:var(--g4);color:#fff}
+.pt-stepper span{font-size:1.2rem;font-weight:800;color:var(--g1);min-width:28px;text-align:center}
+.plant-meter{margin-top:4px}
+.pm-track{height:8px;border-radius:4px;background:var(--bg3);display:flex;overflow:hidden;margin-bottom:5px}
+.pm-dom{background:linear-gradient(90deg,var(--g3),var(--g4));border-radius:4px 0 0 4px;transition:width .3s ease}
+.pm-ext{background:linear-gradient(90deg,#f59e0b,#fbbf24);transition:width .3s ease}
+.pm-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--txt4)}
+
+/* Consumables circle grid */
+.cons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px}
+.cons-item{text-align:center;cursor:pointer}
+.cons-circle{width:68px;height:68px;border-radius:50%;border:2px solid var(--border);background:var(--bg);margin:0 auto 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .22s;position:relative}
+.cons-circle:hover{border-color:var(--g4);transform:scale(1.05);box-shadow:0 4px 14px rgba(34,197,94,.18)}
+.cons-item.selected .cons-circle{border-color:var(--g2);background:linear-gradient(135deg,rgba(8,61,46,.07),rgba(34,197,94,.1));box-shadow:0 4px 18px rgba(8,61,46,.15)}
+.cons-check{position:absolute;top:-2px;right:-2px;width:18px;height:18px;border-radius:50%;background:var(--g4);color:#fff;font-size:.62rem;display:none;align-items:center;justify-content:center;font-weight:700}
+.cons-item.selected .cons-check{display:flex}
+.cons-emoji{font-size:1.4rem;line-height:1}
+.cons-price-tag{font-size:.58rem;font-weight:700;color:var(--g3);margin-top:2px}
+.cons-name{font-size:.69rem;font-weight:600;color:var(--txt2);line-height:1.2}
+.cons-replace{font-size:.6rem;color:var(--txt4);margin-top:2px}
+.cons-stepper{display:none;align-items:center;gap:6px;justify-content:center;margin-top:6px}
+.cons-item.selected .cons-stepper{display:flex}
+.cons-stepper button{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);background:var(--white);color:var(--g2);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:1;transition:all .15s}
+.cons-stepper button:hover{background:var(--g4);border-color:var(--g4);color:#fff}
+.cons-stepper span{font-size:.78rem;font-weight:700;color:var(--g1);min-width:16px;text-align:center}
+
+/* Summary panel */
+.store-summary-wrap{padding:24px 20px 24px 0;position:sticky;top:80px}
+.store-summary{background:var(--white);border:1.5px solid var(--border2);border-radius:18px;padding:20px;box-shadow:var(--shh)}
+.sum-head{display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:800;color:var(--g1);margin-bottom:14px;letter-spacing:-.2px}
+.sum-lines{display:flex;flex-direction:column;gap:5px;min-height:20px}
+.sum-line{display:flex;justify-content:space-between;font-size:.76rem;color:var(--txt2);padding:3px 0;animation:lineIn .2s ease}
+@keyframes lineIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+.sum-divider{height:1px;background:var(--border);margin:10px 0}
+.sum-row{display:flex;justify-content:space-between;align-items:center;font-size:.79rem}
+.sum-sub{color:var(--txt3);font-weight:500}
+.sum-gst{color:var(--txt4);font-size:.74rem}
+.sum-total{font-size:1.05rem;font-weight:900;color:var(--g1);letter-spacing:-.4px}
+.sum-note{font-size:.63rem;color:var(--txt4);margin-top:10px;line-height:1.5;text-align:center}
+
+@media(max-width:1024px){
+  .store-layout{grid-template-columns:1fr}
+  .store-summary-wrap{padding:0 24px 24px;position:static}
+  .tier-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .tier-grid{grid-template-columns:1fr 1fr}
+  .sub-cards{grid-template-columns:1fr 1fr}
+  .plant-row{grid-template-columns:1fr}
+  .cons-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ── TOAST ── */
+.toast-el{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--white);border:1.5px solid var(--g4);border-radius:11px;padding:11px 17px;font-size:.83rem;color:var(--txt);box-shadow:var(--shh);display:flex;align-items:center;gap:8px;max-width:280px;animation:toastIn .25s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MOBILE SIDEBAR OVERLAY BG ── */
+.mob-sb-overlay{
+  display:none;position:fixed;inset:0;z-index:499;
+  background:rgba(0,0,0,.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  opacity:0;transition:opacity .25s;pointer-events:none;
+}
+.mob-sb-overlay.vis{display:block;opacity:1;pointer-events:auto}
+
+/* ── HAMBURGER ── */
+.hamburger{
+  display:none;background:none;border:1.5px solid var(--border);
+  width:38px;height:38px;border-radius:9px;cursor:pointer;
+  align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;
+}
+.hamburger:hover{background:var(--bg);border-color:var(--g4)}
+
+/* ── MOBILE MENU OVERLAY ── */
+.mob-menu{
+  display:none;position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;z-index:350;
+  background:rgba(0,0,0,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;transition:opacity .25s;pointer-events:none;
+}
+.mob-menu.open{opacity:1;pointer-events:auto}
+.mob-menu-inner{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:16px 20px 24px;box-shadow:0 8px 32px rgba(8,61,46,.12);
+  max-height:calc(100vh - var(--nav-h));overflow-y:auto;
+}
+.mob-section-lbl{
+  font-size:.62rem;font-weight:700;color:var(--txt4);text-transform:uppercase;
+  letter-spacing:1.5px;padding:12px 0 6px;
+}
+.mob-item{
+  display:block;width:100%;text-align:left;padding:12px 14px;border-radius:10px;
+  font-size:.9rem;font-weight:500;color:var(--txt2);background:none;border:none;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;
+}
+.mob-item:hover,.mob-item:active{background:var(--bg2);color:var(--g1);font-weight:600}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .g4{grid-template-columns:1fr 1fr}
+  .pkg-grid{grid-template-columns:1fr 1fr}
+  .steps,.stats-row{grid-template-columns:1fr 1fr}
+  .steps::after{display:none}
+}
+@media(max-width:700px){
+  .g4,.pkg-grid,.g3,.stats-row{grid-template-columns:1fr}
+  .section{padding:60px 20px}
+  .ibody{padding:16px 14px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .topnav{padding:0 14px}
+  .tnav-links{display:none}
+  .tn-dash{display:none}
+  .hamburger{display:flex}
+  .mob-menu{display:block}
+  /* Sidebar becomes slide-in overlay on mobile */
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;z-index:500;
+    width:280px;transform:translateX(-100%);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+    box-shadow:none;border-right:none;padding-top:0;
+  }
+  .sidebar.mob-open{transform:translateX(0);box-shadow:8px 0 40px rgba(8,61,46,.18)}
+  .sidebar .sb-header{height:var(--nav-h)}
+  .app-content{margin-left:0!important}
+  /* Chat layout stack on mobile */
+  .chat-wrap{flex-direction:column;height:auto}
+  .chat-side{width:100%;display:flex;gap:6px;flex-wrap:wrap}
+  .chat-side .dc{padding:8px;display:flex;gap:6px;flex-wrap:wrap;flex-direction:row}
+  .chat-side .dc > div{display:none}
+  .chat-side .ctopic{width:auto;margin:0}
+  .msgs{min-height:320px}
+  .hero-h1{font-size:clamp(3rem,12vw,4.5rem);letter-spacing:-3px}
+  .hero-sub{font-size:.88rem}
+  .pkg-grid{gap:14px}
+  .g2{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+  .gg{grid-template-columns:1fr}
+  .store-hero h2{font-size:1.3rem}
+  .ibar{padding:0 14px;flex-wrap:wrap;gap:8px;height:auto;padding:10px 14px}
+}
+@media(max-width:400px){
+  .foot-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column;align-items:center}
+  .hero-actions .btn-prime,.hero-actions .btn-ghost{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ TOPNAV ══════════ -->
+<header class="topnav" id="topnav">
+  <div class="brand" onclick="goHome()">
+    <div class="brand-mark">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 7 7 3 2 5c3 3 5 7 10 7z"/><path d="M12 12c0-5 5-9 10-7-3 3-5 7-10 7z"/></svg>
+    </div>
+    <span class="brand-name">Haryali</span>
+  </div>
+
+  <nav class="tnav-links" id="tnav">
+    <button class="tnl act" onclick="goHome()">Home</button>
+    <button class="tnl" onclick="goHomeAndScroll('how-sec')">How It Works</button>
+    <button class="tnl" onclick="goHomeAndScroll('contact-sec')">Contact</button>
+  </nav>
+
+  <button class="btn-prime tn-dash" onclick="goApp('dashboard',null)" style="padding:8px 20px;font-size:.85rem">
+    View Dashboard
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </button>
+  <button class="hamburger" id="hamBtn" onclick="toggleMobileMenu()">
+    <svg id="hamIco" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--g1)" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</header>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mob-menu" id="mobMenu">
+  <div class="mob-menu-inner">
+    <div class="mob-section-lbl">Navigation</div>
+    <button class="mob-item" onclick="goHome();closeMobMenu()">Home</button>
+    <button class="mob-item" onclick="closeMobMenu();goHomeAndScroll('how-sec')">How It Works</button>
+    <button class="mob-item" onclick="closeMobMenu();goHomeAndScroll('contact-sec')">Contact</button>
+    <div class="mob-section-lbl">App</div>
+    <button class="mob-item" onclick="goApp('dashboard',null);closeMobMenu()">Dashboard</button>
+    <button class="mob-item" onclick="goApp('analytics',null);closeMobMenu()">Analytics</button>
+    <button class="mob-item" onclick="goApp('garden',null);closeMobMenu()">My Garden</button>
+    <button class="mob-item" onclick="goApp('store',null);closeMobMenu()">Store</button>
+    <button class="mob-item" onclick="goApp('chatbot',null);closeMobMenu()">AI Assistant</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     HOME PAGE
+══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+<div class="home">
+
+  <section class="hero" id="hero">
+    <div class="hero-grid"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="orb orb4"></div>
+    <div class="hero-dots" id="hdots"></div>
+    <svg class="wm-tl" width="320" height="320" viewBox="0 0 200 200" fill="none"><path d="M100 15 C38 15 12 60 12 100 C12 152 55 188 100 188 C145 188 188 152 188 100 C188 60 162 15 100 15Z" fill="#22c55e"/><circle cx="100" cy="100" r="40" fill="#4ade80"/></svg>
+    <svg class="wm-tr" width="160" height="160" viewBox="0 0 100 100" fill="none"><path d="M50 8 Q92 8 92 50 Q92 92 50 92 Q8 92 8 50 Q8 28 28 18" stroke="#22c55e" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M78 78 Q92 50 72 28" stroke="#22c55e" stroke-width="6" stroke-linecap="round" fill="none"/></svg>
+
+    <div class="hero-inner">
+      <div class="hero-pill">
+        <span class="pill-dot"></span>
+        Haryali Analytics Platform
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <h1 class="hero-h1">Haryali</h1>
+      <div class="hero-rule"></div>
+      <p class="hero-sub">A structured way to analyze and visualize hydropower data — turning raw datasets into clear, decision-ready insights through clean dashboards and automated analysis.</p>
+      <div class="hero-actions">
+        <button class="btn-prime" onclick="goApp('dashboard',null)">
+          View Dashboard
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn-ghost" onclick="goHomeAndScroll('how-sec')">
+          How It Works
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- STATS -->
+  <div style="background:var(--bg);padding:72px 40px">
+    <div style="max-width:940px;margin:0 auto">
+      <div class="stats-row">
+        <div class="stat-c rv">
+          <div class="stat-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M22 11h1a1 1 0 0 1 0 2h-1"/></svg></div>
+          <div class="stat-n">99.4%</div><div class="stat-l">System Uptime</div>
+        </div>
+        <div class="stat-c rv" style="transition-delay:.1s">
+          <div class="stat-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+          <div class="stat-n">10K+</div><div class="stat-l">Data Points Analyzed</div>
+        </div>
+        <div class="stat-c rv" style="transition-delay:.2s">
+          <div class="stat-ico"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+          <div class="stat-n">24/7</div><div class="stat-l">Real-time Monitoring</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="background:var(--white);padding:88px 40px" id="how-sec">
+    <div style="max-width:1000px;margin:0 auto">
+      <div class="sec-ctr rv" style="margin-bottom:52px">
+        <span class="sec-lbl">How It Works</span>
+        <h2 class="sec-h">Four steps to clear insight</h2>
+        <p class="sec-p">From raw data to actionable decisions — simply and efficiently.</p>
+      </div>
+      <div class="steps">
+        <div class="step rv" style="transition-delay:.04s"><div class="step-n">1</div><h3>Upload Data</h3><p>Upload operational or generation datasets through the interface.</p></div>
+        <div class="step rv" style="transition-delay:.1s"><div class="step-n">2</div><h3>Automated Analysis</h3><p>Data processed using reliable Python-based analytics.</p></div>
+        <div class="step rv" style="transition-delay:.16s"><div class="step-n">3</div><h3>Visualize Insights</h3><p>Explore structured dashboards presenting trends and summaries.</p></div>
+        <div class="step rv" style="transition-delay:.22s"><div class="step-n">4</div><h3>Apply Findings</h3><p>Use insights to evaluate performance and support decisions.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div style="background:var(--bg);padding:88px 40px" id="contact-sec">
+    <div style="max-width:1000px;margin:0 auto">
+      <div class="sec-ctr rv" style="margin-bottom:32px">
+        <span class="sec-lbl">Get In Touch</span>
+        <h2 class="sec-h">Contact Us</h2>
+        <p class="sec-p">Have questions about the platform or garden packages? We'd love to hear from you.</p>
+      </div>
+      <div class="contact-form rv">
+        <div class="fg-row"><div class="fg"><label>First Name</label><input type="text" placeholder="John"/></div><div class="fg"><label>Last Name</label><input type="text" placeholder="Doe"/></div></div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="john@example.com"/></div>
+        <div class="fg"><label>Subject</label><input type="text" placeholder="Inquiry about..."/></div>
+        <div class="fg"><label>Message</label><textarea placeholder="Tell us more..."></textarea></div>
+        <button class="btn-prime" style="width:100%;padding:13px;font-size:.92rem;justify-content:center" onclick="showToast('Message sent! We\'ll be in touch soon.')">
+          Send Message
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="foot-in">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 7 7 3 2 5c3 3 5 7 10 7z"/><path d="M12 12c0-5 5-9 10-7-3 3-5 7-10 7z"/></svg>
+            Haryali
+          </h3>
+          <p style="font-weight:600;color:rgba(255,255,255,.82);font-size:.82rem;margin-bottom:4px">Hydropower Data Analysis Dashboard</p>
+          <p style="color:rgba(255,255,255,.62);font-size:.79rem;margin-bottom:8px">with Integrated Garden Store and AI Assistant</p>
+          <p>A unified platform combining data analytics, a sustainable garden store, and an AI-powered assistant to support data understanding.</p>
+        </div>
+        <div class="foot-col"><h4>Platform</h4><a onclick="goApp('dashboard',null)">Dashboard</a><a onclick="goApp('analytics',null)">Analytics</a><a onclick="goApp('garden',null)">My Garden</a><a onclick="goApp('store',null)">Store</a></div>
+        <div class="foot-col"><h4>Features</h4><a>Data Upload</a><a>Auto Analysis</a><a>Visualizations</a><a onclick="goApp('chatbot',null)">AI Assistant</a></div>
+        <div class="foot-col"><h4>Company</h4><a>About</a><a onclick="goHomeAndScroll('contact-sec')">Contact</a><a>Built with Python</a><a>Streamlit</a></div>
+      </div>
+      <div class="foot-bot"><p>© 2026 Haryali — A lightweight analytics interface for visualizing and understanding datasets. Built using Python and Streamlit.</p></div>
+    </div>
+  </footer>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP SHELL (sidebar + all inner pages)
+══════════════════════════════════════ -->
+<div class="page" id="page-app">
+<div class="app-shell">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-header">
+      <div class="sb-brand-ico">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 7 7 3 2 5c3 3 5 7 10 7z"/><path d="M12 12c0-5 5-9 10-7-3 3-5 7-10 7z"/></svg>
+      </div>
+      <span class="sb-brand-txt">Haryali</span>
+      <button class="sb-toggle-btn" id="sbToggle" onclick="toggleSidebar()" title="Toggle sidebar">
+        <svg id="sbArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-group-lbl">Analytics</div>
+      <button class="sb-item active" id="si-dashboard" onclick="showInner('dashboard',this)">
+        <div class="sb-ico">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--g2)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <span class="sb-label">Dashboard</span>
+      </button>
+      <button class="sb-item" id="si-analytics" onclick="showInner('analytics',this)">
+        <div class="sb-ico">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--g2)" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <span class="sb-label">Analytics</span>
+      </button>
+
+      <div class="sb-group-lbl">Garden</div>
+      <button class="sb-item" id="si-garden" onclick="showInner('garden',this)">
+        <div class="sb-ico">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--g2)" stroke-width="2" stroke-linecap="round"><path d="M12 22V12"/><path d="M12 12C12 7 7 3 2 5c3 3 5 7 10 7z"/><path d="M12 12c0-5 5-9 10-7-3 3-5 7-10 7z"/></svg>
+        </div>
+        <span class="sb-label">My Garden</span>
+        <span class="sb-badge" id="sb-badge">0</span>
+      </button>
+
+      <div class="sb-group-lbl">Commerce</div>
+      <button class="sb-item" id="si-store" onclick="showInner('store',this)">
+        <div class="sb-ico">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--g2)" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span class="sb-label">Store</span>
+      </button>
+
+      <div class="sb-group-lbl">Assistant</div>
+      <button class="sb-item" id="si-chatbot" onclick="showInner('chatbot',this)">
+        <div class="sb-ico">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--g2)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <span class="sb-label">AI Assistant</span>
+      </button>
+
+      <div class="sb-group-lbl">Features</div>
+      <div class="sb-feat-card">
+        <div class="sb-feat-item">
+          <div class="sb-feat-ico" style="background:linear-gradient(135deg,#0f5c44,#22c55e)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="sb-feat-txt">
+            <span class="sb-feat-name">Data Analysis</span>
+            <span class="sb-feat-sub">Energy datasets</span>
+          </div>
+        </div>
+        <div class="sb-feat-item">
+          <div class="sb-feat-ico" style="background:linear-gradient(135deg,#0e9f82,#34d399)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <div class="sb-feat-txt">
+            <span class="sb-feat-name">Real-time Insights</span>
+            <span class="sb-feat-sub">Live monitoring</span>
+          </div>
+        </div>
+        <div class="sb-feat-item">
+          <div class="sb-feat-ico" style="background:linear-gradient(135deg,#0d8c8c,#2dd4bf)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="sb-feat-txt">
+            <span class="sb-feat-name">Auto Workflow</span>
+            <span class="sb-feat-sub">Python analytics</span>
+          </div>
+        </div>
+        <div class="sb-feat-item">
+          <div class="sb-feat-ico" style="background:linear-gradient(135deg,#15803d,#4ade80)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="sb-feat-txt">
+            <span class="sb-feat-name">Sustainability</span>
+            <span class="sb-feat-sub">Renewable focus</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sb-footer">
+      <div class="sb-footer-txt">Haryali v2.0 · © 2026</div>
+    </div>
+  </aside>
+
+  <!-- MOBILE SIDEBAR OVERLAY BG -->
+  <div class="mob-sb-overlay" id="mobSbOverlay" onclick="closeMobileSidebar()"></div>
+
+  <!-- ── APP CONTENT ── -->
+  <div class="app-content" id="appcontent">
+
+    <!-- DASHBOARD -->
+    <div id="inner-dashboard" class="inner-view">
+      <div class="ibar">
+        <div class="ibar-left">
+          <button class="mob-sb-btn" onclick="openMobileSidebar()" title="Menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--g2)" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h2>Dashboard</h2>
+          <span class="badge-live"><span class="ldot"></span>Live</span>
+        </div>
+        <span class="badge-live">System Online</span>
+      </div>
+      <div class="ibody">
+        <div class="g4">
+          <div class="dc"><div class="dl">Total Generation</div><div class="dv">29.6 GWh</div><div class="ds">↑ 8.2% this month</div></div>
+          <div class="dc"><div class="dl">Avg Efficiency</div><div class="dv">89.2%</div><div class="ds">↑ 3.1% vs last</div></div>
+          <div class="dc"><div class="dl">Active Turbines</div><div class="dv">12/14</div><div class="ds" style="color:var(--g4)">Optimal</div></div>
+          <div class="dc"><div class="dl">Garden Plants</div><div class="dv" id="dpcnt">0</div><div class="ds">Sustainable growth</div></div>
+        </div>
+        <div class="g2">
+          <div class="dc">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px">
+              <h3 style="margin:0">Generation Efficiency Trends</h3>
+              <span class="badge-live"><span class="ldot"></span>Live</span>
+            </div>
+            <div style="height:195px;position:relative"><canvas id="dBar"></canvas></div>
+          </div>
+          <div class="dc">
+            <h3>Flow Rate Distribution</h3>
+            <div class="br"><div class="bl">Turbine A</div><div class="btr"><div class="bfi" style="width:87%"></div></div><span class="bpc">87%</span></div>
+            <div class="br"><div class="bl">Turbine B</div><div class="btr"><div class="bfi" style="width:72%"></div></div><span class="bpc">72%</span></div>
+            <div class="br"><div class="bl">Turbine C</div><div class="btr"><div class="bfi" style="width:91%"></div></div><span class="bpc">91%</span></div>
+            <div class="br"><div class="bl">Garden</div><div class="btr"><div class="bfi" style="width:15%"></div></div><span class="bpc">15%</span></div>
+            <div class="br"><div class="bl">Cooling</div><div class="btr"><div class="bfi" style="width:43%"></div></div><span class="bpc">43%</span></div>
+          </div>
+        </div>
+        <div class="g3">
+          <div class="dc"><div class="dl">CO₂ Avoided</div><div class="dv">1,247 t</div><div class="ds">This year</div></div>
+          <div class="dc"><div class="dl">Revenue</div><div class="dv">₹8.4L</div><div class="ds">↑ 18% monthly</div></div>
+          <div class="dc"><div class="dl">System Uptime</div><div class="dv">99.4%</div><div class="ds" style="color:var(--g4)">Excellent</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div id="inner-analytics" class="inner-view" style="display:none">
+      <div class="ibar"><h2>Analytics</h2><span class="badge-live">12 Months</span></div>
+      <div class="ibody">
+        <div class="dc" style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px"><h3>Monthly Generation Analytics (2024–2025)</h3></div>
+          <div style="height:240px;position:relative"><canvas id="aChart"></canvas></div>
+        </div>
+        <div class="g3">
+          <div class="dc"><div class="dl">Peak Output</div><div class="dv">3.1 MW</div><div class="ds">July 2024</div></div>
+          <div class="dc"><div class="dl">Avg Flow Rate</div><div class="dv">812 m³</div><div class="ds">Annual average</div></div>
+          <div class="dc"><div class="dl">Capacity Factor</div><div class="dv">76%</div><div class="ds">↑ 5% YoY</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GARDEN -->
+    <div id="inner-garden" class="inner-view" style="display:none">
+      <div class="ibar"><h2>My Garden</h2><button class="btn-sm" onclick="openAdd()">+ Add Plant</button></div>
+      <div class="ibody">
+        <div class="g4" style="margin-bottom:16px">
+          <div class="dc" style="border-color:rgba(34,197,94,.25)"><div class="dl">Water Usage</div><div class="dv" id="gw" style="font-size:1.3rem">0 L</div><div class="ds">per day</div></div>
+          <div class="dc"><div class="dl">Total Plants</div><div class="dv" id="gtot">0</div></div>
+          <div class="dc"><div class="dl">Vegetables</div><div class="dv" id="gveg">0</div></div>
+          <div class="dc"><div class="dl">Fruits</div><div class="dv" id="gfru" style="color:#ea580c">0</div></div>
+        </div>
+        <div class="dc" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">My Plants</h3><button class="btn-sm" onclick="openAdd()">+ Add Plant</button></div>
+          <div id="gemp" class="empty-s"><div class="ei">🌾</div><h4>Your garden is empty</h4><p>Add plants from the catalog below</p></div>
+          <div class="gg" id="ggrid" style="display:none"></div>
+        </div>
+        <div class="dc">
+          <h3 style="margin-bottom:11px">Plant Catalog — Click to Add</h3>
+          <div class="g-filter" id="gfi"><button class="gtag on" onclick="fG('all',this)">All</button><button class="gtag" onclick="fG('vegetable',this)">Vegetables</button><button class="gtag" onclick="fG('fruit',this)">Fruits</button><button class="gtag" onclick="fG('herb',this)">Herbs</button></div>
+          <div class="cat-grid" id="gcatalog"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STORE -->
+    <div id="inner-store" class="inner-view" style="display:none">
+      <div class="ibar"><h2>Build Your Plan</h2><span class="badge-live"><span class="ldot"></span>Live Pricing</span></div>
+      <div class="ibody store-new-body">
+
+        <!-- Store Hero -->
+        <div class="snhero">
+          <div class="snhero-inner">
+            <span class="sec-lbl" style="font-size:.68rem">Aeroponic Growing Systems</span>
+            <h2>Transparent Pricing,<br/>Built Around You</h2>
+            <p>Select services, choose your unit, pick your plants and consumables. Your total updates live — no hidden costs, ever.</p>
+          </div>
+        </div>
+
+        <div class="store-layout">
+          <!-- LEFT: BUILDER -->
+          <div class="store-builder">
+
+            <!-- SERVICE 1: CONSULTATION -->
+            <div class="svc-block rv">
+              <div class="svc-header">
+                <div class="svc-num">01</div>
+                <div>
+                  <div class="svc-title">On-Site Consultation</div>
+                  <div class="svc-sub">One-time · ₹1,000 + 18% GST</div>
+                </div>
+                <label class="svc-toggle">
+                  <input type="checkbox" id="chk-consult" onchange="updateSummary()" checked/>
+                  <span class="tog-track"><span class="tog-thumb"></span></span>
+                </label>
+              </div>
+              <div class="svc-body">
+                <p>An expert visits your home to assess your balcony or terrace — evaluating dimensions, sunlight, ventilation, structural safety, and electrical access. They'll recommend the right system size and ensure everything is feasible before any commitment.</p>
+                <div class="svc-tags">
+                  <span>📐 Dimension Survey</span><span>☀️ Sunlight Analysis</span><span>⚡ Electrical Check</span><span>✅ Feasibility Report</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SERVICE 2: HARDWARE UNIT -->
+            <div class="svc-block rv" style="transition-delay:.06s">
+              <div class="svc-header">
+                <div class="svc-num">02</div>
+                <div>
+                  <div class="svc-title">Aeroponic Grow Unit</div>
+                  <div class="svc-sub">One-time purchase · Select your size</div>
+                </div>
+              </div>
+              <div class="svc-body">
+                <div class="tier-grid" id="tier-grid">
+                  <div class="tier-card selected" data-tier="0" onclick="selectTier(0)">
+                    <div class="tier-badge">Compact</div>
+                    <div class="tier-plants">12 <span>plants</span></div>
+                    <div class="tier-price">₹1,600</div>
+                    <div class="tier-best">Small balconies</div>
+                    <div class="tier-check">✓</div>
+                  </div>
+                  <div class="tier-card" data-tier="1" onclick="selectTier(1)">
+                    <div class="tier-badge">Standard</div>
+                    <div class="tier-plants">30 <span>plants</span></div>
+                    <div class="tier-price">₹4,000</div>
+                    <div class="tier-best">Medium terraces</div>
+                    <div class="tier-check">✓</div>
+                  </div>
+                  <div class="tier-card popular" data-tier="2" onclick="selectTier(2)">
+                    <div class="tier-pop-tag">Most Popular</div>
+                    <div class="tier-badge">Professional</div>
+                    <div class="tier-plants">48 <span>plants</span></div>
+                    <div class="tier-price">₹6,400</div>
+                    <div class="tier-best">Large terraces</div>
+                    <div class="tier-check">✓</div>
+                  </div>
+                  <div class="tier-card" data-tier="3" onclick="selectTier(3)">
+                    <div class="tier-badge">Commercial</div>
+                    <div class="tier-plants">60 <span>plants</span></div>
+                    <div class="tier-price">₹8,000</div>
+                    <div class="tier-best">Rooftop farms</div>
+                    <div class="tier-check">✓</div>
+                  </div>
+                </div>
+                <!-- Breakdown expandable -->
+                <div class="breakdown-wrap">
+                  <button class="breakdown-tog" onclick="toggleBreakdown(this)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+                    View cost breakdown
+                  </button>
+                  <div class="breakdown-body" id="breakdown-body" style="display:none">
+                    <div id="breakdown-rows"></div>
+                    <div class="breakdown-note">* 2–5% of hardware revenue reserved for warranty & part replacements. Ex-factory price, excludes installation.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SERVICE 3: INSTALLATION -->
+            <div class="svc-block rv" style="transition-delay:.12s">
+              <div class="svc-header">
+                <div class="svc-num">03</div>
+                <div>
+                  <div class="svc-title">Professional Installation</div>
+                  <div class="svc-sub">One-time · ₹1,500 + 18% GST</div>
+                </div>
+                <label class="svc-toggle">
+                  <input type="checkbox" id="chk-install" onchange="updateSummary()" checked/>
+                  <span class="tog-track"><span class="tog-thumb"></span></span>
+                </label>
+              </div>
+              <div class="svc-body">
+                <p>Our certified technician handles the full setup at your location — assembly, calibration, and a live walkthrough so you're growing confidently from day one.</p>
+                <div class="install-breakdown">
+                  <div class="ib-row"><span>Technician labour</span><span>₹700</span></div>
+                  <div class="ib-row"><span>Transport & handling</span><span>₹500</span></div>
+                  <div class="ib-row"><span>Scheduling & support</span><span>₹300</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SERVICE 4: APP SUBSCRIPTION -->
+            <div class="svc-block rv" style="transition-delay:.18s">
+              <div class="svc-header">
+                <div class="svc-num">04</div>
+                <div>
+                  <div class="svc-title">App Subscription</div>
+                  <div class="svc-sub">Plant tracking, reminders & support</div>
+                </div>
+                <label class="svc-toggle">
+                  <input type="checkbox" id="chk-sub" onchange="updateSummary()" checked/>
+                  <span class="tog-track"><span class="tog-thumb"></span></span>
+                </label>
+              </div>
+              <div class="svc-body">
+                <p>The Haryali app keeps your garden thriving — growth milestones, nutrient refill alerts, maintenance scheduling, troubleshooting, and direct support chat.</p>
+                <div class="sub-cards">
+                  <div class="sub-card" id="sub-monthly" onclick="selectSub('monthly')">
+                    <div class="sub-price">₹499<span>/mo</span></div>
+                    <div class="sub-label">Monthly Plan</div>
+                    <div class="sub-detail">Flexible · Cancel anytime</div>
+                  </div>
+                  <div class="sub-card selected" id="sub-annual" onclick="selectSub('annual')">
+                    <div class="sub-save-ribbon">SAVE ₹989</div>
+                    <div class="sub-price">₹4,999<span>/yr</span></div>
+                    <div class="sub-label">Annual Plan</div>
+                    <div class="sub-detail">Best Value · Save ₹989</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PLANT QUANTITY -->
+            <div class="svc-block rv" style="transition-delay:.24s">
+              <div class="svc-header">
+                <div class="svc-num">05</div>
+                <div>
+                  <div class="svc-title">Your Plant Mix</div>
+                  <div class="svc-sub">Domestic ₹10/plant · Exotic ₹17/plant</div>
+                </div>
+              </div>
+              <div class="svc-body">
+                <div class="plant-cap-info" id="plant-cap-info">Capacity: <strong id="cap-txt">12 plants</strong> (selected unit)</div>
+                <div class="plant-row">
+                  <div class="plant-type">
+                    <div class="pt-label">🌿 Domestic Plants <span class="pt-price">₹10 each</span></div>
+                    <div class="pt-stepper">
+                      <button class="step-btn" onclick="adjustPlants('dom',-1)">−</button>
+                      <span id="dom-cnt">8</span>
+                      <button class="step-btn" onclick="adjustPlants('dom',1)">+</button>
+                    </div>
+                  </div>
+                  <div class="plant-type">
+                    <div class="pt-label">🌺 Exotic Plants <span class="pt-price">₹17 each</span></div>
+                    <div class="pt-stepper">
+                      <button class="step-btn" onclick="adjustPlants('ext',-1)">−</button>
+                      <span id="ext-cnt">4</span>
+                      <button class="step-btn" onclick="adjustPlants('ext',1)">+</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="plant-meter">
+                  <div class="pm-track">
+                    <div class="pm-dom" id="pm-dom" style="width:66.6%"></div>
+                    <div class="pm-ext" id="pm-ext" style="width:33.3%"></div>
+                  </div>
+                  <div class="pm-labels">
+                    <span id="pm-used">12 / 12 plants</span>
+                    <span id="pm-warn" style="color:#ef4444;font-size:.72rem;display:none">⚠️ Max capacity reached</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CONSUMABLES -->
+            <div class="svc-block rv" style="transition-delay:.3s">
+              <div class="svc-header">
+                <div class="svc-num">06</div>
+                <div>
+                  <div class="svc-title">Consumables & Accessories</div>
+                  <div class="svc-sub">Click to select, then set quantity</div>
+                </div>
+              </div>
+              <div class="svc-body">
+                <div class="cons-grid" id="cons-grid">
+                  <!-- rendered by JS -->
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /store-builder -->
+
+          <!-- RIGHT: LIVE SUMMARY -->
+          <div class="store-summary-wrap">
+            <div class="store-summary" id="store-summary">
+              <div class="sum-head">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Your Plan
+              </div>
+              <div class="sum-lines" id="sum-lines">
+                <!-- rendered by JS -->
+              </div>
+              <div class="sum-divider"></div>
+              <div class="sum-row sum-sub"><span>Subtotal</span><span id="sum-subtotal">₹0</span></div>
+              <div class="sum-row sum-gst"><span>GST (18%)</span><span id="sum-gst">₹0</span></div>
+              <div class="sum-divider"></div>
+              <div class="sum-row sum-total"><span>Total</span><span id="sum-total">₹0</span></div>
+              <button class="btn-prime" style="width:100%;justify-content:center;margin-top:16px;font-size:.88rem" onclick="showToast('🌱 Plan submitted! Our team will contact you shortly.')">
+                Get This Plan
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+              <div class="sum-note">All prices include 18% GST in final total. Ex-factory hardware prices exclude installation.</div>
+            </div>
+          </div>
+
+        </div><!-- /store-layout -->
+      </div>
+    </div>
+
+    <!-- CHATBOT -->
+    <div id="inner-chatbot" class="inner-view" style="display:none">
+      <div class="ibar"><h2>AI Assistant</h2><span class="badge-live"><span class="ldot"></span>Haryali AI</span></div>
+      <div class="ibody" style="padding-bottom:0">
+        <!-- API Key Banner -->
+        <div class="chat-wrap">
+          <div class="chat-side">
+            <div class="dc" style="padding:12px">
+              <div style="font-size:.64rem;font-weight:700;color:var(--txt4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Quick Topics</div>
+              <button class="ctopic" onclick="sQ('How is the hydropower system performing?')">System Status</button>
+              <button class="ctopic" onclick="sQ('What vegetables grow best in hydroponics?')">Best Vegetables</button>
+              <button class="ctopic" onclick="sQ('How often should I water my plants?')">Watering Guide</button>
+              <button class="ctopic" onclick="sQ('What is the current energy efficiency?')">Efficiency Data</button>
+              <button class="ctopic" onclick="sQ('How do I balance nutrients for hydroponics?')">Nutrient Tips</button>
+              <button class="ctopic" onclick="sQ('Which fruits can I grow hydroponically?')">Fruit Advice</button>
+              <button class="ctopic" onclick="sQ('Which garden kit package should I choose?')">Package Guide</button>
+            </div>
+          </div>
+          <div class="chat-main">
+            <div class="msgs" id="msgs">
+              <div class="msg ai"><div class="mav ai">H</div><div><div class="mbub">Hello! I'm <strong>Haryali AI</strong>. I can help with:<br/><br/>— Analytics &amp; hydropower data<br/>— Garden care &amp; plant tips<br/>— Store &amp; service advice<br/><br/>What would you like to know?</div><div class="mtime">Haryali AI · Just now</div></div></div>
+            </div>
+            <div class="cinp">
+              <input type="text" id="cin" placeholder="Ask about analytics, garden tips, or products…" onkeydown="if(event.key==='Enter')sendChat()"/>
+              <button class="btn-sm" onclick="sendChat()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /app-content -->
+</div><!-- /app-shell -->
+</div><!-- /page-app -->
+
+<!-- ADD PLANT MODAL -->
+<div id="add-m" style="display:none"><div class="mover" onclick="if(event.target===this)closeM('add-m')"><div class="modal"><button class="mcls" onclick="closeM('add-m')">✕</button><h3>Add Plant to Garden</h3><div class="fg"><label>Plant Name</label><input type="text" id="pna" placeholder="e.g. Cherry Tomato"/></div><div class="fg-row"><div class="fg"><label>Type</label><select id="pty"><option value="vegetable">Vegetable</option><option value="fruit">Fruit</option><option value="herb">Herb</option></select></div><div class="fg"><label>Emoji</label><input type="text" id="pem" placeholder="🍅" maxlength="2"/></div></div><div class="fg"><label>Growth Stage</label><select id="pst"><option value="seed">Seed</option><option value="sprout">Sprout</option><option value="grow">Growing</option><option value="harvest">Harvest Ready</option></select></div><div class="fg"><label>Watering Schedule</label><select id="pwa"><option>Every day</option><option>Every 2 days</option><option>Every 3 days</option><option>Twice a day</option></select></div><button class="btn-prime" style="width:100%;padding:11px;justify-content:center" onclick="addPlant()">Add to Garden</button></div></div></div>
+
+<!-- PAYMENT MODAL -->
+<div id="pay-m" style="display:none"><div class="mover" onclick="if(event.target===this)closeM('pay-m')"><div class="modal" style="max-width:450px"><button class="mcls" onclick="closeM('pay-m')">✕</button><h3 id="ptitle">Complete Purchase</h3><div id="pbody"><div class="pnote">Test Mode — Use card: 4242 4242 4242 4242. No real charges.</div><div class="ord"><h4>Order Summary</h4><div class="orow"><span id="pn2">—</span><span id="pp2">—</span></div><div class="orow"><span>Plants</span><span id="ppl">—</span></div><div class="orow"><span>Delivery</span><span style="color:var(--g4)">FREE</span></div><div class="orow otot"><span>Total</span><span id="ptot">—</span></div></div><div class="fg"><label>Cardholder Name</label><input type="text" placeholder="Full name"/></div><div class="fg"><label>Card Number</label><input type="text" placeholder="4242 4242 4242 4242" maxlength="19" oninput="fc(this)"/></div><div class="fg-row"><div class="fg"><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5" oninput="fe(this)"/></div><div class="fg"><label>CVV</label><input type="text" placeholder="123" maxlength="3"/></div></div><div class="fg"><label>Email</label><input type="email" placeholder="you@example.com"/></div><button class="btn-prime" style="width:100%;padding:12px;justify-content:center" onclick="procPay()">Pay <span id="pamt"></span></button></div><div id="psucc" style="display:none" class="succ"><div class="si">✅</div><h3>Order Confirmed!</h3><p id="smsg"></p><button class="btn-sm" style="margin-top:14px" onclick="closeM('pay-m')">Continue</button></div></div></div></div>
+
+<!-- TOAST -->
+<div class="toast-el" id="toastEl" style="display:none"><span id="tico">✅</span><span id="tmsg"></span></div>
+
+<script>
+// ══ SIDEBAR STATE ══
+let sbOpen = true;
+function toggleSidebar(){
+  sbOpen = !sbOpen;
+  const sb = document.getElementById('sidebar');
+  const ac = document.getElementById('appcontent');
+  const arrow = document.getElementById('sbArrow');
+  sb.classList.toggle('collapsed', !sbOpen);
+  ac.classList.toggle('expanded', !sbOpen);
+  // Flip arrow direction
+  arrow.innerHTML = sbOpen
+    ? '<path d="M15 18l-6-6 6-6"/>'
+    : '<path d="M9 18l6-6-6-6"/>';
+}
+
+// ══ MOBILE MENU ══
+let mobMenuOpen = false;
+function toggleMobileMenu(){
+  mobMenuOpen = !mobMenuOpen;
+  const menu = document.getElementById('mobMenu');
+  const ico = document.getElementById('hamIco');
+  if(mobMenuOpen){
+    menu.classList.add('open');
+    ico.innerHTML='<line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/>';
+  } else {
+    menu.classList.remove('open');
+    ico.innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+  }
+}
+function closeMobMenu(){
+  mobMenuOpen=false;
+  document.getElementById('mobMenu').classList.remove('open');
+  document.getElementById('hamIco').innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+}
+// Close mobile menu when clicking overlay background
+document.addEventListener('click',function(e){
+  if(e.target.id==='mobMenu') closeMobMenu();
+});
+
+// Mobile sidebar overlay
+function openMobileSidebar(){
+  document.getElementById('sidebar').classList.add('mob-open');
+  const ov=document.getElementById('mobSbOverlay');
+  if(ov) ov.classList.add('vis');
+}
+function closeMobileSidebar(){
+  document.getElementById('sidebar').classList.remove('mob-open');
+  const ov=document.getElementById('mobSbOverlay');
+  if(ov) ov.classList.remove('vis');
+}
+
+// ══ NAVIGATION ══
+let curInner = 'dashboard';
+let dBarInit=false, aChartInit=false;
+
+function goHome(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-home').classList.add('active');
+  document.querySelectorAll('.tnl').forEach(b=>b.classList.remove('act'));
+  document.querySelector('.tnl').classList.add('act');
+  closeMobileSidebar();
+  window.scrollTo(0,0);
+  setTimeout(()=>{spawnDots();setupReveal();},80);
+}
+
+function goHomeAndScroll(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-home').classList.add('active');
+  document.querySelectorAll('.tnl').forEach(b=>b.classList.remove('act'));
+  closeMobileSidebar();
+  setTimeout(()=>{
+    const el=document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth'});
+    spawnDots();setupReveal();
+  },50);
+}
+
+function goApp(section, navEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-app').classList.add('active');
+  document.querySelectorAll('.tnl').forEach(b=>b.classList.remove('act'));
+  closeMobileSidebar();
+  window.scrollTo(0,0);
+  showInner(section, document.getElementById('si-'+section));
+  if(section==='garden') renderCat();
+}
+
+function showInner(section, sbEl){
+  // hide all inner views
+  document.querySelectorAll('.inner-view').forEach(v=>v.style.display='none');
+  document.getElementById('inner-'+section).style.display='block';
+  // update sidebar active
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  if(sbEl) sbEl.classList.add('active');
+  curInner = section;
+  closeMobileSidebar();
+  if(section==='dashboard') setTimeout(initDBar,80);
+  if(section==='analytics') setTimeout(initAChart,80);
+  if(section==='garden') renderCat();
+  if(section==='store') setTimeout(initStore,80);
+}
+
+// topnav scroll
+window.addEventListener('scroll',()=>document.getElementById('topnav').classList.toggle('shad',scrollY>8));
+
+// ══ DOTS ══
+function spawnDots(){
+  const c=document.getElementById('hdots');
+  if(c&&c.children.length)return;if(!c)return;
+  [[8,12,2.5],[22,6,2],[38,18,3],[58,9,2],[74,15,2.5],[88,6,2],[95,30,2.5],
+   [5,38,2],[15,55,3],[28,42,2],[48,50,2.5],[68,44,2],[84,48,3],[94,62,2],
+   [3,68,2.5],[19,76,2],[35,62,3],[54,72,2],[70,80,2.5],[88,66,2],[12,88,2],
+   [42,86,2.5],[64,91,2],[80,84,3],[95,78,2]
+  ].forEach(([x,y,s])=>{
+    const d=document.createElement('div');d.className='hdot';
+    d.style.cssText=`left:${x}%;top:${y}%;width:${s}px;height:${s}px;animation-duration:${4+Math.random()*5}s;animation-delay:${Math.random()*4}s`;
+    c.appendChild(d);
+  });
+}
+setTimeout(spawnDots,60);
+
+// ══ SCROLL REVEAL ══
+function setupReveal(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.1});
+  document.querySelectorAll('.rv,.stat-c,.step,.contact-form').forEach(el=>obs.observe(el));
+}
+setTimeout(setupReveal,80);
+
+// ══ CHARTS ══
+const CD={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
+function cg(ctx,t,b){const g=ctx.createLinearGradient(0,0,0,200);g.addColorStop(0,t);g.addColorStop(1,b);return g}
+
+function initDBar(){if(dBarInit)return;dBarInit=true;
+  const ctx=document.getElementById('dBar').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Efficiency %',data:[82,78,85,91,88,95,90],backgroundColor:cg(ctx,'rgba(23,136,95,.88)','rgba(23,136,95,.28)'),borderRadius:9,borderSkipped:false}]},options:{...CD,scales:{y:{min:0,max:100,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#5a9070',font:{size:10,family:'DM Sans'}}},x:{grid:{display:false},ticks:{color:'#5a9070',font:{size:10,family:'DM Sans'}}}}}});
+}
+function initAChart(){if(aChartInit)return;aChartInit=true;
+  const ctx=document.getElementById('aChart').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{label:'GWh',data:[22,19,25,28,26,30,31,29,27,24,21,20],backgroundColor:cg(ctx,'rgba(23,136,95,.88)','rgba(23,136,95,.26)'),borderRadius:7,borderSkipped:false},{label:'Efficiency %',data:[85,82,87,89,88,91,92,90,88,86,83,81],type:'line',borderColor:'#22c55e',backgroundColor:'transparent',tension:.42,pointBackgroundColor:'#22c55e',pointRadius:4,yAxisID:'y1'}]},options:{...CD,scales:{y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#5a9070',font:{size:10,family:'DM Sans'}}},y1:{position:'right',min:70,max:100,grid:{display:false},ticks:{color:'#5a9070',font:{size:10,family:'DM Sans'}}},x:{grid:{display:false},ticks:{color:'#5a9070',font:{size:10,family:'DM Sans'}}}},plugins:{legend:{display:true,labels:{color:'#1e5c3c',font:{size:11,family:'DM Sans'}}}}}});
+}
+
+// ══ GARDEN ══
+const CAT=[
+  // Vegetables
+  {e:'🍅',n:'Tomato',t:'vegetable'},{e:'🍒',n:'Cherry Tomato',t:'vegetable'},{e:'🥒',n:'Cucumber',t:'vegetable'},{e:'🌶️',n:'Chilli',t:'vegetable'},
+  {e:'🥬',n:'Lettuce',t:'vegetable'},{e:'🌿',n:'Spinach',t:'vegetable'},{e:'🫑',n:'Capsicum',t:'vegetable'},{e:'🫚',n:'Pepper',t:'vegetable'},
+  {e:'🥦',n:'Broccoli',t:'vegetable'},{e:'🤍',n:'Cauliflower',t:'vegetable'},{e:'🪣',n:'Cabbage',t:'vegetable'},{e:'🌾',n:'Fennel',t:'vegetable'},
+  {e:'🍆',n:'Eggplant',t:'vegetable'},{e:'🌽',n:'Corn',t:'vegetable'},
+  {e:'💚',n:'Kale',t:'vegetable'},{e:'🍃',n:'Arugula',t:'vegetable'},{e:'🌈',n:'Swiss Chard',t:'vegetable'},{e:'🥢',n:'Bok Choy',t:'vegetable'},
+  {e:'🌸',n:'Edible Flowers',t:'vegetable'},
+  // Fruits
+  {e:'🍓',n:'Strawberry',t:'fruit'},{e:'🍋',n:'Lemon',t:'fruit'},{e:'🍇',n:'Grapes',t:'fruit'},{e:'🫐',n:'Blueberry',t:'fruit'},
+  {e:'🌑',n:'Mulberry',t:'fruit'},{e:'❤️',n:'Raspberry',t:'fruit'},{e:'🔴',n:'Cranberry',t:'fruit'},{e:'🍑',n:'Cherry',t:'fruit'},
+  {e:'🟤',n:'Amla',t:'fruit'},{e:'💜',n:'Falsa',t:'fruit'},{e:'🟣',n:'Sab Berry',t:'fruit'},{e:'🌰',n:'Tamarind',t:'fruit'},
+  {e:'🍊',n:'Mini Orange',t:'fruit'},
+  // Herbs
+  {e:'🌱',n:'Mint',t:'herb'},{e:'🌿',n:'Basil',t:'herb'},{e:'🪴',n:'Cilantro',t:'herb'},{e:'🎋',n:'Lemongrass',t:'herb'},
+  {e:'🍀',n:'Parsley',t:'herb'},{e:'🌺',n:'Oregano',t:'herb'},
+];
+let plants=[],gflt='all';
+const wMap={'Every day':2.5,'Every 2 days':1.3,'Every 3 days':.9,'Twice a day':5};
+const stP={seed:10,sprout:35,grow:65,harvest:100};
+const stL={seed:'Seed',sprout:'Sprout',grow:'Growing',harvest:'Harvestable'};
+const stC={seed:'bs',sprout:'bp',grow:'bg',harvest:'bh'};
+
+function fG(t,el){gflt=t;document.querySelectorAll('.gtag').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderCat()}
+function renderCat(){
+  const items=gflt==='all'?CAT:CAT.filter(p=>p.t===gflt);
+  document.getElementById('gcatalog').innerHTML=items.map(p=>`<div class="ccard" onclick="fillAdd('${p.e}','${p.n}','${p.t}')"><div class="ce">${p.e}</div><div class="cn">${p.n}</div><div class="ct">${p.t.charAt(0).toUpperCase()+p.t.slice(1)}</div></div>`).join('');
+}
+function fillAdd(e,n,t){document.getElementById('pem').value=e;document.getElementById('pna').value=n;document.getElementById('pty').value=t;openAdd()}
+function openAdd(){document.getElementById('add-m').style.display='flex'}
+function addPlant(){
+  const n=document.getElementById('pna').value.trim()||'My Plant',t=document.getElementById('pty').value;
+  const e=document.getElementById('pem').value||'🌿',s=document.getElementById('pst').value,w=document.getElementById('pwa').value;
+  plants.push({id:Date.now(),n,t,e,s,w});closeM('add-m');renderGarden();updG();showToast(n+' added to garden!');
+}
+function remPlant(id){plants=plants.filter(p=>p.id!==id);renderGarden();updG();showToast('Plant removed')}
+function advStage(id){
+  const p=plants.find(x=>x.id===id);if(!p)return;
+  const st=['seed','sprout','grow','harvest'],i=st.indexOf(p.s);
+  if(i<st.length-1)p.s=st[i+1];renderGarden();showToast('Advanced to '+stL[p.s]);
+}
+function renderGarden(){
+  const grid=document.getElementById('ggrid'),emp=document.getElementById('gemp');
+  if(!plants.length){grid.style.display='none';emp.style.display='block';return}
+  grid.style.display='grid';emp.style.display='none';
+  grid.innerHTML=plants.map(p=>`<div class="gp"><button class="gprm" onclick="remPlant(${p.id})" title="Remove">✕</button><div class="gpt"><div class="gpe">${p.e}</div><div class="gpi"><h4>${p.n}</h4><p>${p.t.charAt(0).toUpperCase()+p.t.slice(1)}</p></div></div><div class="gpbar"><div class="gpfi" style="width:${stP[p.s]}%"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="gpb ${stC[p.s]}">${stL[p.s]}</span><span style="font-size:.6rem;color:var(--txt4)">${stP[p.s]}%</span></div><div class="gpw">💧 ${p.w}</div>${p.s!=='harvest'?`<button class="gpadv" onclick="advStage(${p.id})">Advance Stage →</button>`:'<div style="color:#ea580c;font-size:.69rem;margin-top:6px;font-weight:600">✓ Ready to harvest!</div>'}</div>`).join('');
+}
+function updG(){
+  const tot=plants.length,veg=plants.filter(p=>p.t==='vegetable').length,fr=plants.filter(p=>p.t==='fruit').length;
+  const w=plants.reduce((a,p)=>{const m={seed:.5,sprout:1,grow:2,harvest:2.5}[p.s]||1;return a+(wMap[p.w]||2)*m},0);
+  document.getElementById('gtot').textContent=tot;document.getElementById('gveg').textContent=veg;
+  document.getElementById('gfru').textContent=fr;document.getElementById('gw').textContent=w.toFixed(1)+' L';
+  const d=document.getElementById('dpcnt');if(d)d.textContent=tot;
+  const b=document.getElementById('sb-badge');if(b)b.textContent=tot;
+}
+
+// ══ PAYMENT ══
+let curP={};
+function openPay(name,price,amt,pl){
+  curP={name,price,pl};
+  ['pn2','pp2','ptot'].forEach((id,i)=>document.getElementById(id).textContent=[name,price,price][i]);
+  document.getElementById('ppl').textContent=pl+' plants';
+  document.getElementById('pamt').textContent=price;
+  document.getElementById('ptitle').textContent='Complete Purchase';
+  document.getElementById('pbody').style.display='block';
+  document.getElementById('psucc').style.display='none';
+  document.getElementById('pay-m').style.display='flex';
+}
+function fc(el){let v=el.value.replace(/\D/g,'').substr(0,16);el.value=v.replace(/(\d{4})/g,'$1 ').trim()}
+function fe(el){let v=el.value.replace(/\D/g,'').substr(0,4);if(v.length>2)v=v.substr(0,2)+'/'+v.substr(2);el.value=v}
+function procPay(){
+  document.getElementById('pbody').style.display='none';
+  document.getElementById('ptitle').textContent='Order Confirmed!';
+  document.getElementById('smsg').textContent=`Your ${curP.name} (${curP.pl} plants) worth ${curP.price} is confirmed. A receipt will be emailed shortly.`;
+  document.getElementById('psucc').style.display='block';
+  showToast('Order placed: '+curP.name);
+}
+
+// ══ CHATBOT — Haryali AI ══
+const GEMINI_KEY = 'gen-lang-client-0909541493';
+let chatHistory = [];
+
+const SYSTEM_CONTEXT = `You are Haryali AI, the friendly and knowledgeable assistant for Haryali — a clean energy analytics and sustainable hydroponic garden platform. You help users with:
+- Hydropower analytics, turbine efficiency, energy generation data (system runs at ~89.2% efficiency, 2.4 MW output, 99.4% uptime, CO₂ avoided: 1,247 tonnes/year)
+- Hydroponic garden care: watering schedules, plant care, nutrients (N-P-K 3-1-2 for leafy greens, 1-3-2 for fruiting plants, pH 5.5–6.5, EC 1.2–2.4 mS/cm)
+- Top vegetables: Lettuce (30 days), Tomatoes, Cucumbers, Peppers, Broccoli
+- Top fruits: Strawberries, Lemon, Blueberries, Mini Orange, Raspberry, Amla
+- Store services: On-site Consultation ₹1,000, Aeroponic units from ₹1,600–₹8,000, Installation ₹1,500, App subscription ₹499/mo or ₹4,999/yr
+- General sustainable farming and clean energy questions
+Keep responses concise, warm, and helpful. Use **bold** sparingly for key numbers. Respond in 2–4 short paragraphs max.`;
+
+function sQ(m){ document.getElementById('cin').value = m; sendChat(); }
+
+async function sendChat(){
+  const inp = document.getElementById('cin'), m = inp.value.trim();
+  if(!m) return;
+  appM(m, 'u'); inp.value = '';
+
+  // Typing indicator
+  const c = document.getElementById('msgs');
+  const typingEl = document.createElement('div');
+  typingEl.className = 'msg ai'; typingEl.id = 'typing-ind';
+  typingEl.innerHTML = '<div class="mav ai">H</div><div class="mbub"><div class="typing"><span></span><span></span><span></span></div></div>';
+  c.appendChild(typingEl); sc();
+
+  chatHistory.push({ role: 'user', parts: [{ text: m }] });
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: SYSTEM_CONTEXT }] },
+        contents: chatHistory,
+        generationConfig: { maxOutputTokens: 450, temperature: 0.75 }
+      })
+    });
+    const data = await res.json();
+    document.getElementById('typing-ind')?.remove();
+
+    if(data.error){
+      const msg = data.error.message || 'API error.';
+      appM('⚠️ **Error:** ' + msg + (msg.toLowerCase().includes('key') || msg.toLowerCase().includes('api') ? '\n\nPlease check your API key.' : ''), 'ai');
+      chatHistory.pop();
+    } else {
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I couldn\'t generate a response. Please try again.';
+      chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+      if(chatHistory.length > 24) chatHistory = chatHistory.slice(-24);
+      appM(reply, 'ai');
+    }
+  } catch(err) {
+    document.getElementById('typing-ind')?.remove();
+    appM('⚠️ Network error — please check your internet connection and try again.', 'ai');
+    chatHistory.pop();
+  }
+}
+
+function appM(txt, role){
+  const c = document.getElementById('msgs'), d = document.createElement('div');
+  d.className = 'msg ' + role;
+  const now = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+  const formatted = txt
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br/>');
+  d.innerHTML = `<div class="mav ${role}">${role==='ai'?'H':'U'}</div><div><div class="mbub">${formatted}</div><div class="mtime">${role==='ai'?'Haryali AI':'You'} · ${now}</div></div>`;
+  c.appendChild(d); sc();
+}
+function sc(){ const c = document.getElementById('msgs'); c.scrollTop = c.scrollHeight; }
+
+// ══ STORE — AEROPONIC BUILDER ══
+const TIERS = [
+  { name:'Compact Unit', plants:12, price:1600, best:'Small balconies, first-time growers',
+    breakdown:[['Pump & misting system','₹540'],['Pipes, nozzles, fittings','₹360'],['Frame & structure','₹450'],['Reservoir & timer','₹270'],['Electricals & accessories','₹180'],['Packaging, wastage & QC','₹150'],['Ex-factory cost','~₹1,950']] },
+  { name:'Standard Unit', plants:30, price:4000, best:'Medium terraces, growing families',
+    breakdown:[['Pump & misting system','₹1,350'],['Pipes, nozzles, fittings','₹900'],['Frame & structure','₹1,125'],['Reservoir & timer','₹675'],['Electricals & accessories','₹450'],['Packaging, wastage & QC','₹375'],['Ex-factory cost','~₹4,875']] },
+  { name:'Professional Unit', plants:48, price:6400, best:'Serious home growers, large terraces',
+    breakdown:[['Pump & misting system','₹2,160'],['Pipes, nozzles, fittings','₹1,440'],['Frame & structure','₹1,800'],['Reservoir & timer','₹1,080'],['Electricals & accessories','₹720'],['Packaging, wastage & QC','₹600'],['Ex-factory cost','~₹7,800']] },
+  { name:'Commercial Unit', plants:60, price:8000, best:'Rooftop farms, commercial setups',
+    breakdown:[['Pump & misting system','₹2,700'],['Pipes, nozzles, fittings','₹1,800'],['Frame & structure','₹2,250'],['Reservoir & timer','₹1,350'],['Electricals & accessories','₹900'],['Packaging, wastage & QC','₹750'],['Ex-factory cost','~₹9,750']] }
+];
+
+const CONSUMABLES = [
+  {id:'dom-sap', e:'🌿', n:'Domestic Sapling', p:10, rep:'As needed'},
+  {id:'exo-sap', e:'🌺', n:'Exotic Sapling', p:17, rep:'As needed'},
+  {id:'nut-ref', e:'💧', n:'Nutrient Refill', p:299, rep:'Monthly'},
+  {id:'nozzle', e:'🔩', n:'Nozzle / Mist Head', p:99, rep:'6–12 months'},
+  {id:'pump-kit', e:'⚙️', n:'Pump Service Kit', p:499, rep:'Annually'},
+];
+
+let selTier = 0;
+let selSub = 'annual';
+let domPlants = 8, extPlants = 4;
+let consQty = {};  // {id: qty}
+let consSelected = {}; // {id: bool}
+
+function selectTier(i) {
+  selTier = i;
+  document.querySelectorAll('.tier-card').forEach((c,idx) => c.classList.toggle('selected', idx===i));
+  // update cap
+  const cap = TIERS[i].plants;
+  document.getElementById('cap-txt').textContent = cap + ' plants';
+  // clamp plants
+  const total = domPlants + extPlants;
+  if(total > cap) {
+    const ratio = domPlants / total;
+    domPlants = Math.round(cap * ratio);
+    extPlants = cap - domPlants;
+    document.getElementById('dom-cnt').textContent = domPlants;
+    document.getElementById('ext-cnt').textContent = extPlants;
+  }
+  updateMeter();
+  updateSummary();
+  renderBreakdown();
+}
+
+function toggleBreakdown(btn) {
+  const body = document.getElementById('breakdown-body');
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  btn.classList.toggle('open', !open);
+  if(!open) renderBreakdown();
+}
+
+function renderBreakdown() {
+  const rows = TIERS[selTier].breakdown;
+  document.getElementById('breakdown-rows').innerHTML = rows.map((r,i) =>
+    `<div class="br-row"><span>${r[0]}</span><span>${r[1]}</span></div>`
+  ).join('');
+}
+
+function selectSub(plan) {
+  selSub = plan;
+  document.getElementById('sub-monthly').classList.toggle('selected', plan==='monthly');
+  document.getElementById('sub-annual').classList.toggle('selected', plan==='annual');
+  updateSummary();
+}
+
+function adjustPlants(type, delta) {
+  const cap = TIERS[selTier].plants;
+  if(type === 'dom') {
+    const newVal = domPlants + delta;
+    if(newVal < 0) return;
+    if(newVal + extPlants > cap) { showWarn(); return; }
+    domPlants = newVal;
+    document.getElementById('dom-cnt').textContent = domPlants;
+  } else {
+    const newVal = extPlants + delta;
+    if(newVal < 0) return;
+    if(domPlants + newVal > cap) { showWarn(); return; }
+    extPlants = newVal;
+    document.getElementById('ext-cnt').textContent = extPlants;
+  }
+  hideWarn();
+  updateMeter();
+  updateSummary();
+}
+
+function showWarn() {
+  document.getElementById('pm-warn').style.display = 'block';
+  setTimeout(hideWarn, 2200);
+}
+function hideWarn() { document.getElementById('pm-warn').style.display = 'none'; }
+
+function updateMeter() {
+  const cap = TIERS[selTier].plants;
+  const domPct = (domPlants / cap) * 100;
+  const extPct = (extPlants / cap) * 100;
+  document.getElementById('pm-dom').style.width = domPct + '%';
+  document.getElementById('pm-ext').style.width = extPct + '%';
+  document.getElementById('pm-used').textContent = (domPlants+extPlants) + ' / ' + cap + ' plants';
+}
+
+function initConsumables() {
+  const grid = document.getElementById('cons-grid');
+  if(!grid) return;
+  grid.innerHTML = CONSUMABLES.map(c => `
+    <div class="cons-item" id="ci-${c.id}" onclick="toggleCons('${c.id}')">
+      <div class="cons-circle">
+        <span class="cons-emoji">${c.e}</span>
+        <span class="cons-price-tag">₹${c.p}</span>
+        <span class="cons-check">✓</span>
+      </div>
+      <div class="cons-name">${c.n}</div>
+      <div class="cons-replace">${c.rep}</div>
+      <div class="cons-stepper" onclick="event.stopPropagation()">
+        <button onclick="adjCons('${c.id}',-1)">−</button>
+        <span id="cq-${c.id}">1</span>
+        <button onclick="adjCons('${c.id}',1)">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCons(id) {
+  consSelected[id] = !consSelected[id];
+  if(consSelected[id] && !consQty[id]) consQty[id] = 1;
+  document.getElementById('ci-' + id).classList.toggle('selected', !!consSelected[id]);
+  updateSummary();
+}
+
+function adjCons(id, delta) {
+  consQty[id] = Math.max(1, (consQty[id] || 1) + delta);
+  document.getElementById('cq-' + id).textContent = consQty[id];
+  updateSummary();
+}
+
+function fmt(n) { return '₹' + n.toLocaleString('en-IN'); }
+
+function updateSummary() {
+  const lines = [];
+  let subtotal = 0;
+
+  // Consultation
+  if(document.getElementById('chk-consult')?.checked) {
+    lines.push({l:'Consultation', v:1000});
+    subtotal += 1000;
+  }
+  // Hardware
+  const tier = TIERS[selTier];
+  lines.push({l: tier.name + ' (' + tier.plants + ' plants)', v: tier.price});
+  subtotal += tier.price;
+
+  // Installation
+  if(document.getElementById('chk-install')?.checked) {
+    lines.push({l:'Professional Installation', v:1500});
+    subtotal += 1500;
+  }
+  // Subscription
+  if(document.getElementById('chk-sub')?.checked) {
+    if(selSub === 'annual') { lines.push({l:'App Subscription (Annual)', v:4999}); subtotal += 4999; }
+    else { lines.push({l:'App Subscription (Monthly)', v:499}); subtotal += 499; }
+  }
+  // Plants
+  if(domPlants > 0) { lines.push({l:'Domestic Saplings ×'+domPlants, v:domPlants*10}); subtotal += domPlants*10; }
+  if(extPlants > 0) { lines.push({l:'Exotic Saplings ×'+extPlants, v:extPlants*17}); subtotal += extPlants*17; }
+  // Consumables
+  CONSUMABLES.forEach(c => {
+    if(consSelected[c.id]) {
+      const qty = consQty[c.id] || 1;
+      const val = c.p * qty;
+      lines.push({l: c.n + (qty>1?' ×'+qty:''), v: val});
+      subtotal += val;
+    }
+  });
+
+  // Render lines
+  const linesEl = document.getElementById('sum-lines');
+  linesEl.innerHTML = lines.length ? lines.map(l =>
+    `<div class="sum-line"><span>${l.l}</span><span>${fmt(l.v)}</span></div>`
+  ).join('') : '<div style="font-size:.74rem;color:var(--txt4)">No services selected</div>';
+
+  const gst = Math.round(subtotal * 0.18);
+  const total = subtotal + gst;
+  document.getElementById('sum-subtotal').textContent = fmt(subtotal);
+  document.getElementById('sum-gst').textContent = fmt(gst);
+  document.getElementById('sum-total').textContent = fmt(total);
+}
+
+// Init store on load — called when store tab is opened
+function initStore() {
+  initConsumables();
+  renderBreakdown();
+  updateMeter();
+  updateSummary();
+}
+
+// ══ MODALS & TOAST ══
+function closeM(id){document.getElementById(id).style.display='none'}
+let tt;
+function showToast(m){
+  const el=document.getElementById('toastEl');
+  document.getElementById('tmsg').textContent=m;
+  el.style.display='flex';clearTimeout(tt);tt=setTimeout(()=>el.style.display='none',2800);
+}
+
+// Init
+renderCat();
+</script>
+</body>
+</html>
